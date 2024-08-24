@@ -3,376 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dual Career Calculator</title>
+    <title>Advanced Paycheck Calculator</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; line-height: 1.6; }
         h1, h2, h3 { color: #333; }
         .page { display: none; }
         .page.active { display: block; }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="number"], input[type="radio"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        input[type="radio"] { width: auto; margin-right: 10px; }
+        input[type="number"], input[type="text"], select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
         button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
         button:hover { background-color: #0056b3; }
         .explanation { background-color: #f8f8f8; border-left: 4px solid #007bff; padding: 10px; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
         th { background-color: #f2f2f2; }
-        .section { margin-bottom: 30px; border: 1px solid #ddd; padding: 20px; border-radius: 4px; }
         .header { text-align: left; margin-bottom: 20px; }
         .logo { max-width: 200px; height: auto; margin-bottom: 10px; }
-        .info-link { font-size: 0.8em; margin-bottom: 5px; }
+        .location-input { display: flex; gap: 10px; align-items: flex-end; }
+        .location-input input { flex-grow: 1; }
+        .location-input button { flex-shrink: 0; }
     </style>
 </head>
 <body>
     <div class="header">
-        <img src="1.png" alt="FinMango and ModernHusbands Logo" class="logo">
-        <h1>Dual Career Calculator</h1>
+        <img src="logo.png" alt="FinMango and ModernHusbands Logo" class="logo">
+        <h1>Advanced Paycheck Calculator</h1>
+    </div>
+
+    <div id="introPage" class="page active">
+        <h2>Welcome to Your Comprehensive Paycheck Calculator</h2>
+        <div class="explanation">
+            <p>This advanced calculator, a collaboration between <a href="https://finmango.org" target="_blank">FinMango</a> and <a href="https://modernhusbands.com" target="_blank">Modern Husbands</a>, helps you evaluate your financial situation across different locations in the United States. It considers factors such as:</p>
+            <ul>
+                <li>Your annual salary</li>
+                <li>Federal, state, and local taxes</li>
+                <li>Cost of living components (housing, transportation, food, etc.)</li>
+            </ul>
+            <p>You can now compare locations by selecting from our expanded list of cities, entering a city name, or providing a zip code. This tool will help you make informed decisions about where to live and work.</p>
+        </div>
+        <button onclick="showPage('locationPage')">Let's Get Started</button>
     </div>
     
-    <div id="introPage" class="page active">
-        <h2>Dual Income Lifestyle Planner</h2>
+    <div id="locationPage" class="page">
+        <h2>Select Locations to Compare</h2>
         <div class="explanation">
-            <p>This calculator, a collaboration between <a href="https://finmango.org" target="_blank">FinMango</a> and <a href="https://modernhusbands.com" target="_blank">Modern Husbands</a>, helps dual-income families and couples evaluate their financial trajectory over the next 15 years. Factors include household income, potential childcare costs, healthcare expenses, basic living expenses, taxes, and retirement savings.</p>
-            <p>We've pre-populated the fields with example numbers. Feel free to adjust these to match your specific situation.</p>
+            <p>Choose up to three locations you'd like to compare. You can select from the dropdown, enter a city name, or provide a zip code for each location.</p>
         </div>
-        <button onclick="showPage('incomePage')">Let's Get Started</button>
+        <div class="form-group">
+            <label for="location1">Location 1:</label>
+            <div class="location-input">
+                <select id="location1"></select>
+                <input type="text" id="cityInput1" placeholder="Enter city name">
+                <input type="text" id="zipInput1" placeholder="Enter zip code">
+                <button onclick="searchLocation(1)">Search</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="location2">Location 2 (optional):</label>
+            <div class="location-input">
+                <select id="location2"></select>
+                <input type="text" id="cityInput2" placeholder="Enter city name">
+                <input type="text" id="zipInput2" placeholder="Enter zip code">
+                <button onclick="searchLocation(2)">Search</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="location3">Location 3 (optional):</label>
+            <div class="location-input">
+                <select id="location3"></select>
+                <input type="text" id="cityInput3" placeholder="Enter city name">
+                <input type="text" id="zipInput3" placeholder="Enter zip code">
+                <button onclick="searchLocation(3)">Search</button>
+            </div>
+        </div>
+        <button onclick="showPage('introPage')">Previous</button>
+        <button onclick="showPage('salaryPage')">Next</button>
     </div>
 
-    <div id="incomePage" class="page">
-        <h2>Household Income Information</h2>
-        
-        <div class="section">
-            <h3>Family Type</h3>
-            <div class="form-group">
-                <label>
-                    <input type="radio" name="familyType" value="withChildren" checked> Family with Children
-                </label>
-                <label>
-                    <input type="radio" name="familyType" value="dink"> DINK (Dual Income No Kids)
-                </label>
-            </div>
+    <div id="salaryPage" class="page">
+        <h2>Enter Your Salary Information</h2>
+        <div class="explanation">
+            <p>Provide your occupation and annual salary. This information will be used to calculate your take-home pay after taxes and compare it with the cost of living in each selected location.</p>
         </div>
-
-        <div class="section">
-            <h3>Household Income</h3>
-            <div class="explanation">
-                <p>Enter the current or proposed salary for each spouse/partner. Each salary should be based on anticipated income after your chosen family planning scenario.</p>
-            </div>
-            <div class="form-group">
-                <label for="salary1">Spouse / Partner #1 Annual Salary ($)</label>
-                <input type="number" id="salary1" value="75000" required>
-            </div>
-            <div class="form-group">
-                <label for="salary2">Spouse / Partner #2 Annual Salary ($)</label>
-                <input type="number" id="salary2" value="65000" required>
-            </div>
-            <div class="info-link"> <a href="https://www.dol.gov/sites/dolgov/files/WB/Mothers-Families-Work/Lifetime-caregiving-costs_508.pdf" target="_blank">Note: Experts have found that for each year a college-educated woman leaves the workforce to be a full-time caregiver, she loses $237,000 in lifetime compensation.</a> </div>
+        <div class="form-group">
+            <label for="occupation">Occupation:</label>
+            <input type="text" id="occupation" placeholder="Enter your occupation">
         </div>
-
-        <button onclick="showPage('expensesPage')">Next: Expenses</button>
-    </div>
-
-    <div id="expensesPage" class="page">
-        <h2>Expenses</h2>
-        
-        <div id="childcareSection" class="section">
-            <h3>Additional Childcare Costs</h3>
-            <div class="explanation">
-                <p>Enter any additional annual childcare costs (e.g., daycare) beyond the baseline costs already included in our calculations. This will be added to our baseline for up to 5 years.</p>
-            </div>
-            <div class="form-group">
-                <label for="childCareCost">Additional Annual Childcare Cost ($)</label>
-                <div class="info-link"> <a href="https://www.dol.gov/agencies/wb/topics/childcare/price-by-age-care-setting?_ga=2.212957522.717837184.1724436616-1072235102.1724436616" target="_blank">Click here for Childcare Prices by Age of Children and Care Setting</a> </div>
-                <input type="number" id="childCareCost" value="20000" required>
-            </div>
-            <div class="form-group">
-                <label for="childCareYears">Number of Years Needing Additional Childcare (max 5)</label>
-                <input type="number" id="childCareYears" value="5" min="0" max="5" required>
-            </div>
+        <div class="form-group">
+            <label for="salary">Annual Salary ($):</label>
+            <input type="number" id="salary" required>
         </div>
-
-        <div class="section">
-            <h3>Healthcare Costs</h3>
-            <div class="explanation">
-                <p>Enter your annual healthcare premium costs and estimated out-of-pocket expenses.</p>
-            </div>
-            <div class="form-group">
-                <label for="healthcarePremium">Annual Healthcare Premium ($)</label>
-                <input type="number" id="healthcarePremium" value="5000" required>
-            </div>
-            <div class="form-group">
-                <label for="healthcareOutOfPocket">Estimated Annual Out-of-Pocket Healthcare Expenses ($)</label>
-                <input type="number" id="healthcareOutOfPocket" value="2000" required>
-            </div>
-        </div>
-
-        <button onclick="showPage('livingExpensesPage')">Next: Living Expenses</button>
-    </div>
-
-    <div id="livingExpensesPage" class="page">
-        <h2>Basic Living Expenses</h2>
-        
-        <div class="section">
-            <h3>Monthly Living Costs</h3>
-            <div class="explanation">
-                <p>Enter your estimated monthly expenses for essential living costs. These will be factored into your net income calculations.</p>
-            </div>
-            <div class="form-group">
-                <label for="housingCost">Monthly Housing Costs (Rent/Mortgage) ($)</label>
-                <input type="number" id="housingCost" value="1500" required>
-            </div>
-            <div class="form-group">
-                <label for="transportationCost">Monthly Transportation Costs (Car payments, insurance, public transit) ($)</label>
-                <input type="number" id="transportationCost" value="500" required>
-            </div>
-            <div class="form-group">
-                <label for="foodUtilitiesCost">Monthly Food and Utilities Costs ($)</label>
-                <input type="number" id="foodUtilitiesCost" value="800" required>
-            </div>
-        </div>
-
-        <button onclick="showPage('taxesPage')">Next: Taxes</button>
-    </div>
-<div id="taxesPage" class="page">
-        <h2>Taxes</h2>
-        
-        <div class="section">
-            <h3>Tax Rates</h3>
-            <div class="explanation">
-                <p>Enter your estimated tax rates. These are rough estimates and may not reflect exact tax calculations.</p>
-            </div>
-            <div class="form-group">
-                <label for="federalTaxRate">Estimated Federal Tax Rate (%)</label>
-                <div class="info-link"> <a href="https://www.irs.gov/filing/federal-income-tax-rates-and-brackets" target="_blank">Click here to review the Federal Income Tax Brackets</a> </div>
-                <input type="number" id="federalTaxRate" value="22" required>
-            </div>
-            <div class="form-group">
-                <label for="stateTaxRate">Estimated State Tax Rate (%)</label>
-                <div class="info-link"> <a href="https://help.nfc.usda.gov/systems/TAXES/index.php" target="_blank">Click here to review State Income Tax Brackets</a> </div>
-                <input type="number" id="stateTaxRate" value="5" required>
-            </div>
-            <div class="form-group">
-                <label for="localTaxRate">Estimated Local Tax Rate (%)</label>
-                <input type="number" id="localTaxRate" value="1" required>
-            </div>
-        </div>
-
-        <button onclick="showPage('projectionPage')">Next: Growth Projections</button>
-    </div>
-
-    <div id="projectionPage" class="page">
-        <h2>Growth Projections</h2>
-        
-        <div class="section">
-            <h3>Future Growth and Savings</h3>
-            <div class="explanation">
-                <p>Estimate how you think your salaries and expenses might change over time, and how much you plan to save for retirement.</p>
-            </div>
-            <div class="form-group">
-                <label for="salaryGrowth">Estimated Annual Salary Growth (%)</label>
-                <input type="number" id="salaryGrowth" value="3" required>
-            </div>
-            <div class="form-group">
-                <label for="childCareGrowth">Estimated Annual Increase in Childcare Costs (%)</label>
-                <input type="number" id="childCareGrowth" value="2" required>
-            </div>
-            <div class="form-group">
-                <label for="healthcareGrowth">Estimated Annual Increase in Healthcare Costs (%)</label>
-                <input type="number" id="healthcareGrowth" value="5" required>
-            </div>
-            <div class="form-group">
-                <label for="livingExpensesGrowth">Estimated Annual Increase in Living Expenses (%)</label>
-                <input type="number" id="livingExpensesGrowth" value="2" required>
-            </div>
-            <div class="form-group">
-                <label for="retirementContribution1">Spouse / Partner #1 Annual Retirement Contribution (%)</label>
-                <input type="number" id="retirementContribution1" value="6" required>
-            </div>
-            <div class="form-group">
-                <label for="employerMatch1">Spouse / Partner #1 Employer Match (%)</label>
-                <input type="number" id="employerMatch1" value="5" required>
-            </div>
-            <div class="form-group">
-                <label for="retirementContribution2">Spouse / Partner #2 Annual Retirement Contribution (%)</label>
-                <input type="number" id="retirementContribution2" value="6" required>
-            </div>
-            <div class="form-group">
-                <label for="employerMatch2">Spouse / Partner #2 Employer Match (%)</label>
-                <input type="number" id="employerMatch2" value="5" required>
-            </div>
-        </div>
-
-        <button onclick="showPage('taxesPage')">Previous</button>
+        <button onclick="showPage('locationPage')">Previous</button>
         <button onclick="calculateResults()">Calculate Results</button>
     </div>
 
     <div id="resultsPage" class="page">
-        <h2>Your Projected Household Finances</h2>
+        <h2>Your Paycheck and Cost of Living Breakdown</h2>
         <div class="explanation">
-            <p>Below is a projection of your household finances over the next 15 years, including income, expenses, taxes, savings, and adjusting for inflation. The Annual Cost Per Child combines your entered childcare costs and the annual cost of one child. According to the USDA, the estimated annual cost per child is $18,000 in 2024. Remember, this estimate is based on the information you provided and uses simplified tax calculations.</p>
+            <p>Below is a detailed breakdown of your financial situation in each selected location. This includes:</p>
+            <ul>
+                <li>Your gross pay and take-home pay after taxes</li>
+                <li>A breakdown of various taxes (federal, state, local, etc.)</li>
+                <li>Monthly cost of living expenses (housing, transportation, food, etc.)</li>
+                <li>Annual cost of living and remaining money after expenses</li>
+            </ul>
+            <p>Use this information to compare how your financial situation might differ across these locations.</p>
         </div>
         <table id="resultsTable">
             <thead>
                 <tr>
-                    <th>Year</th>
-                    <th>Gross Income</th>
-                    <th>Taxes</th>
-                    <th>Annual Cost Per Child</th>
-                    <th>Healthcare</th>
-                    <th>Basic Living Expenses</th>
-                    <th>Retirement Savings</th>
-                    <th>Net Income</th>
+                    <th>Category</th>
+                    <th id="location1Header"></th>
+                    <th id="location2Header"></th>
+                    <th id="location3Header"></th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Results will be inserted here by JavaScript -->
             </tbody>
         </table>
-        
-        <h3>DINK vs. Current Scenario Comparison</h3>
-        <div class="explanation">
-            <p>This comparison shows the financial difference between your current scenario and a DINK (Dual Income No Kids) scenario over 15 years.</p>
-        </div>
-        <div id="comparisonSummary" class="section">
-            <h4>Total Difference Over 15 Years</h4>
-            <p id="totalDifference"></p>
-            <h4>Key Milestones</h4>
-            <table id="milestonesTable">
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Current Scenario</th>
-                        <th>DINK Scenario</th>
-                        <th>Difference</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows will be inserted here by JavaScript -->
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="explanation">
-            <p><a href="https://finmango.org" target="_blank">FinMango</a> is a nonprofit advancing financial health worldwide and <a href="https://modernhusbands.com" target="_blank">Modern Husbands</a> helps couples manage their money and their home.</p>
-            <p><a href="https://modernhusbands.com" target="_blank">Click here</a> to subscribe and download The Ultimate Guide to Family Planning for free. By subscribing to our free newsletter, you will receive ideas every couple of weeks on managing money and the home as a team.</p>
-        </div>
-        <button onclick="showPage('incomePage')">Start Over</button>
+        <button onclick="showPage('locationPage')">Start Over</button>
     </div>
 
     <script>
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-
-            if (pageId === 'expensesPage') {
-                const isDINK = document.querySelector('input[name="familyType"]:checked').value === 'dink';
-                document.getElementById('childcareSection').style.display = isDINK ? 'none' : 'block';
-            }
-        }
-
-        function calculateResults() {
-            const isDINK = document.querySelector('input[name="familyType"]:checked').value === 'dink';
-            const salary1 = parseFloat(document.getElementById('salary1').value);
-            const salary2 = parseFloat(document.getElementById('salary2').value);
-            const additionalChildCareCost = isDINK ? 0 : parseFloat(document.getElementById('childCareCost').value);
-            const childCareYears = isDINK ? 0 : Math.min(parseInt(document.getElementById('childCareYears').value), 5);
-            const healthcarePremium = parseFloat(document.getElementById('healthcarePremium').value);
-            const healthcareOutOfPocket = parseFloat(document.getElementById('healthcareOutOfPocket').value);
-            const housingCost = parseFloat(document.getElementById('housingCost').value) * 12;
-            const transportationCost = parseFloat(document.getElementById('transportationCost').value) * 12;
-            const foodUtilitiesCost = parseFloat(document.getElementById('foodUtilitiesCost').value) * 12;
-            const federalTaxRate = parseFloat(document.getElementById('federalTaxRate').value) / 100;
-            const stateTaxRate = parseFloat(document.getElementById('stateTaxRate').value) / 100;
-            const localTaxRate = parseFloat(document.getElementById('localTaxRate').value) / 100;
-            const salaryGrowth = parseFloat(document.getElementById('salaryGrowth').value) / 100;
-            const childCareGrowth = parseFloat(document.getElementById('childCareGrowth').value) / 100;
-            const healthcareGrowth = parseFloat(document.getElementById('healthcareGrowth').value) / 100;
-            const livingExpensesGrowth = parseFloat(document.getElementById('livingExpensesGrowth').value) / 100;
-            const retirementContribution1 = parseFloat(document.getElementById('retirementContribution1').value) / 100;
-            const employerMatch1 = parseFloat(document.getElementById('employerMatch1').value) / 100;
-            const retirementContribution2 = parseFloat(document.getElementById('retirementContribution2').value) / 100;
-            const employerMatch2 = parseFloat(document.getElementById('employerMatch2').value) / 100;
-
-            const baselineChildCareCosts = [14440, 14832, 15277, 15735, 16207, 20866, 21493, 22138, 22802, 23486, 24190, 24916, 25664, 26434, 27227];
-            const totalBasicLivingExpenses = housingCost + transportationCost + foodUtilitiesCost;
-
-            let results = '';
-            let currentScenarioData = [];
-            let dinkScenarioData = [];
-
-            for (let year = 1; year <= 15; year++) {
-                const projectedSalary1 = salary1 * Math.pow(1 + salaryGrowth, year - 1);
-                const projectedSalary2 = salary2 * Math.pow(1 + salaryGrowth, year - 1);
-                const grossIncome = projectedSalary1 + projectedSalary2;
-                
-                let projectedChildCareCost = 0;
-                if (!isDINK) {
-                    projectedChildCareCost = baselineChildCareCosts[year - 1];
-                    if (year <= childCareYears) {
-                        projectedChildCareCost += additionalChildCareCost * Math.pow(1 + childCareGrowth, year - 1);
-                    }
-                }
-
-                const projectedHealthcareCost = (healthcarePremium + healthcareOutOfPocket) * Math.pow(1 + healthcareGrowth, year - 1);
-                const projectedBasicLivingExpenses = totalBasicLivingExpenses * Math.pow(1 + livingExpensesGrowth, year - 1);
-                
-                const retirementSavings1 = projectedSalary1 * (retirementContribution1 + Math.min(retirementContribution1, employerMatch1));
-                const retirementSavings2 = projectedSalary2 * (retirementContribution2 + Math.min(retirementContribution2, employerMatch2));
-                const totalRetirementSavings = retirementSavings1 + retirementSavings2;
-                
-                const taxableIncome = grossIncome - totalRetirementSavings;
-                const taxes = taxableIncome * (federalTaxRate + stateTaxRate + localTaxRate);
-                
-                const netIncome = grossIncome - taxes - projectedChildCareCost - projectedHealthcareCost - projectedBasicLivingExpenses - totalRetirementSavings;
-
-                currentScenarioData.push(netIncome);
-
-                // Calculate DINK scenario (no childcare costs)
-                const dinkNetIncome = grossIncome - taxes - projectedHealthcareCost - projectedBasicLivingExpenses - totalRetirementSavings;
-                dinkScenarioData.push(dinkNetIncome);
-
-                results += `<tr>
-                    <td>${year}</td>
-                    <td>$${Math.round(grossIncome).toLocaleString()}</td>
-                    <td>$${Math.round(taxes).toLocaleString()}</td>
-                    <td>$${Math.round(projectedChildCareCost).toLocaleString()}</td>
-                    <td>$${Math.round(projectedHealthcareCost).toLocaleString()}</td>
-                    <td>$${Math.round(projectedBasicLivingExpenses).toLocaleString()}</td>
-                    <td>$${Math.round(totalRetirementSavings).toLocaleString()}</td>
-                    <td>$${Math.round(netIncome).toLocaleString()}</td>
-                </tr>`;
-            }
-
-            document.getElementById('resultsTable').getElementsByTagName('tbody')[0].innerHTML = results;
-            showPage('resultsPage');
-            renderComparisonSummary(currentScenarioData, dinkScenarioData);
-        }
-
-        function renderComparisonSummary(currentScenarioData, dinkScenarioData) {
-            const totalDifference = dinkScenarioData.reduce((sum, value, index) => sum + value - currentScenarioData[index], 0);
-            document.getElementById('totalDifference').textContent = `$${Math.round(totalDifference).toLocaleString()}`;
-
-            const milestones = [5, 10, 15];
-            let milestonesHtml = '';
-
-            milestones.forEach(year => {
-                const index = year - 1;
-                const currentValue = currentScenarioData[index];
-                const dinkValue = dinkScenarioData[index];
-                const difference = dinkValue - currentValue;
-
-                milestonesHtml += `<tr>
-                    <td>${year}</td>
-                    <td>$${Math.round(currentValue).toLocaleString()}</td>
-                    <td>$${Math.round(dinkValue).toLocaleString()}</td>
-                    <td>$${Math.round(difference).toLocaleString()}</td>
-                </tr>`;
-            });
-
-            document.getElementById('milestonesTable').getElementsByTagName('tbody')[0].innerHTML = milestonesHtml;
-        }
+        // JavaScript code will be added here in the second half
     </script>
 </body>
 </html>
+// Sample data for locations, tax rates, and cost of living (you'd replace this with real data)
+const locations = [
+    { 
+        name: "New York, NY", 
+        stateTax: 0.0685, 
+        localTax: 0.03876,
+        costOfLiving: {
+            housing: 3000,
+            transportation: 150,
+            food: 500,
+            utilities: 150,
+            healthcare: 400,
+            other: 500
+        }
+    },
+    { 
+        name: "Los Angeles, CA", 
+        stateTax: 0.0930, 
+        localTax: 0,
+        costOfLiving: {
+            housing: 2500,
+            transportation: 200,
+            food: 400,
+            utilities: 120,
+            healthcare: 350,
+            other: 450
+        }
+    },
+    { 
+        name: "Chicago, IL", 
+        stateTax: 0.0495, 
+        localTax: 0.0925,
+        costOfLiving: {
+            housing: 1800,
+            transportation: 100,
+            food: 350,
+            utilities: 130,
+            healthcare: 300,
+            other: 400
+        }
+    },
+    { 
+        name: "Houston, TX", 
+        stateTax: 0, 
+        localTax: 0,
+        costOfLiving: {
+            housing: 1500,
+            transportation: 120,
+            food: 300,
+            utilities: 140,
+            healthcare: 320,
+            other: 380
+        }
+    },
+    { 
+        name: "Phoenix, AZ", 
+        stateTax: 0.0459, 
+        localTax: 0,
+        costOfLiving: {
+            housing: 1400,
+            transportation: 110,
+            food: 280,
+            utilities: 150,
+            healthcare: 310,
+            other: 360
+        }
+    },
+    { 
+        name: "Philadelphia, PA", 
+        stateTax: 0.0307, 
+        localTax: 0.038907,
+        costOfLiving: {
+            housing: 1600,
+            transportation: 130,
+            food: 320,
+            utilities: 135,
+            healthcare: 330,
+            other: 390
+        }
+    },
+    // Add more locations as needed
+];
+
+// Populate location dropdowns
+function populateLocations() {
+    const selects = [document.getElementById('location1'), document.getElementById('location2'), document.getElementById('location3')];
+    selects.forEach(select => {
+        select.innerHTML = '<option value="">Select a location</option>';
+        locations.forEach(location => {
+            const option = document.createElement('option');
+            option.value = location.name;
+            option.textContent = location.name;
+            select.appendChild(option);
+        });
+    });
+}
+
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+}
+
+function searchLocation(index) {
+    const cityInput = document.getElementById(`cityInput${index}`).value;
+    const zipInput = document.getElementById(`zipInput${index}`).value;
+    const select = document.getElementById(`location${index}`);
+
+    // In a real application, you would make an API call here to get the location data
+    // For this example, we'll just use the first matching city in our sample data
+    let matchedLocation;
+    if (cityInput) {
+        matchedLocation = locations.find(loc => loc.name.toLowerCase().includes(cityInput.toLowerCase()));
+    } else if (zipInput) {
+        // For this example, we'll just pretend the zip code matches the first location
+        matchedLocation = locations[0];
+    }
+
+    if (matchedLocation) {
+        select.value = matchedLocation.name;
+    } else {
+        alert("Location not found. Please try again or select from the dropdown.");
+    }
+}
+
+function calculateResults() {
+    const salary = parseFloat(document.getElementById('salary').value);
+    const selectedLocations = [
+        document.getElementById('location1').value,
+        document.getElementById('location2').value,
+        document.getElementById('location3').value
+    ].filter(Boolean);
+
+    const results = selectedLocations.map(locationName => {
+        const location = locations.find(loc => loc.name === locationName);
+        const federalTax = calculateFederalTax(salary);
+        const stateTax = salary * location.stateTax;
+        const localTax = salary * location.localTax;
+        const socialSecurity = Math.min(salary * 0.062, 9114); // 2021 cap
+        const medicare = salary * 0.0145;
+        const totalTax = federalTax + stateTax + localTax + socialSecurity + medicare;
+        const takehomePay = salary - totalTax;
+
+        // Calculate annual cost of living
+        const annualCostOfLiving = Object.values(location.costOfLiving).reduce((a, b) => a + b, 0) * 12;
+
+        return {
+            location: locationName,
+            grossPay: salary,
+            federalTax,
+            stateTax,
+            localTax,
+            socialSecurity,
+            medicare,
+            totalTax,
+            takehomePay,
+            costOfLiving: location.costOfLiving,
+            annualCostOfLiving,
+            remainingMoney: takehomePay - annualCostOfLiving
+        };
+    });
+
+    displayResults(results);
+    showPage('resultsPage');
+}
+
+function calculateFederalTax(salary) {
+    // 2021 tax brackets (simplified)
+    if (salary <= 9950) return salary * 0.10;
+    if (salary <= 40525) return 995 + (salary - 9950) * 0.12;
+    if (salary <= 86375) return 4664 + (salary - 40525) * 0.22;
+    if (salary <= 164925) return 14751 + (salary - 86375) * 0.24;
+    if (salary <= 209425) return 33603 + (salary - 164925) * 0.32;
+    if (salary <= 523600) return 47843 + (salary - 209425) * 0.35;
+    return 157804.25 + (salary - 523600) * 0.37;
+}
+
+function displayResults(results) {
+    const table = document.getElementById('resultsTable');
+    const tbody = table.querySelector('tbody');
+    tbody.innerHTML = '';
+
+    results.forEach((result, index) => {
+        document.getElementById(`location${index + 1}Header`).textContent = result.location;
+    });
+
+    const categories = [
+        { name: 'Gross Pay', key: 'grossPay' },
+        { name: 'Federal Tax', key: 'federalTax' },
+        { name: 'State Tax', key: 'stateTax' },
+        { name: 'Local Tax', key: 'localTax' },
+        { name: 'Social Security', key: 'socialSecurity' },
+        { name: 'Medicare', key: 'medicare' },
+        { name: 'Total Tax', key: 'totalTax' },
+        { name: 'Take-Home Pay', key: 'takehomePay' },
+        { name: 'Monthly Housing', key: 'costOfLiving.housing' },
+        { name: 'Monthly Transportation', key: 'costOfLiving.transportation' },
+        { name: 'Monthly Food', key: 'costOfLiving.food' },
+        { name: 'Monthly Utilities', key: 'costOfLiving.utilities' },
+        { name: 'Monthly Healthcare', key: 'costOfLiving.healthcare' },
+        { name: 'Monthly Other Expenses', key: 'costOfLiving.other' },
+        { name: 'Annual Cost of Living', key: 'annualCostOfLiving' },
+        { name: 'Remaining Money (Annual)', key: 'remainingMoney' }
+    ];
+
+    categories.forEach(category => {
+        const row = tbody.insertRow();
+        const cellCategory = row.insertCell();
+        cellCategory.textContent = category.name;
+
+        results.forEach(result => {
+            const cell = row.insertCell();
+            let value;
+            if (category.key.includes('.')) {
+                const [obj, prop] = category.key.split('.');
+                value = result[obj][prop];
+            } else {
+                value = result[category.key];
+            }
+            cell.textContent = `$${value.toFixed(2)}`;
+        });
+    });
+}
+
+// Initialize the calculator
+populateLocations();
