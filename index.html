@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simplified Paycheck Calculator</title>
+    <title>Detailed Paycheck Calculator</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; line-height: 1.6; }
         h1, h2, h3 { color: #333; }
         .page { display: none; }
         .page.active { display: block; }
@@ -20,12 +20,16 @@
         th { background-color: #f2f2f2; }
         .header { text-align: left; margin-bottom: 20px; }
         .logo { max-width: 200px; height: auto; margin-bottom: 10px; }
+        .breakdown { display: none; margin-top: 10px; }
+        .breakdown.active { display: block; }
+        .toggle-breakdown { background: none; border: none; color: #007bff; cursor: pointer; padding: 0; }
+        .toggle-breakdown:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="header">
         <img src="https://via.placeholder.com/200x50.png?text=FinMango+Logo" alt="FinMango Logo" class="logo">
-        <h1>Simplified Paycheck Calculator</h1>
+        <h1>Detailed Paycheck Calculator</h1>
     </div>
 
     <div id="introPage" class="page active">
@@ -79,21 +83,11 @@
     <div id="resultsPage" class="page">
         <h2>Your Paycheck and Cost of Living Comparison</h2>
         <div class="explanation">
-            <p>Below is a summary of your financial situation in each selected city. This includes your take-home pay and annual expenses.</p>
+            <p>Below is a summary of your financial situation in each selected city. This includes your take-home pay and annual expenses. Click "Show Breakdown" to see detailed calculations.</p>
         </div>
-        <table id="resultsTable">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th id="location1Header"></th>
-                    <th id="location2Header"></th>
-                    <th id="location3Header"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Results will be inserted here by JavaScript -->
-            </tbody>
-        </table>
+        <div id="resultsContainer">
+            <!-- Results will be inserted here by JavaScript -->
+        </div>
         <button onclick="showPage('locationPage')">Start Over</button>
     </div>
 
@@ -138,6 +132,11 @@
         document.getElementById(pageId).classList.add('active');
     }
 
+    function toggleBreakdown(id) {
+        const breakdown = document.getElementById(id);
+        breakdown.classList.toggle('active');
+    }
+
     // Initialize the calculator
     populateLocations();
 function calculateResults() {
@@ -164,9 +163,17 @@ function calculateResults() {
 
         return {
             location: locationName,
+            grossPay: salary,
+            federalTax: federalTax,
+            stateTax: stateTax,
+            localTax: localTax,
+            socialSecurity: socialSecurity,
+            medicare: medicare,
+            totalTax: totalTax,
             takehomePay: takehomePay,
             annualExpenses: annualExpenses,
-            remainingMoney: takehomePay - annualExpenses
+            remainingMoney: takehomePay - annualExpenses,
+            costIndex: location.costIndex
         };
     });
 
@@ -186,40 +193,41 @@ function calculateFederalTax(salary) {
 }
 
 function displayResults(results) {
-    const table = document.getElementById('resultsTable');
-    const tbody = table.querySelector('tbody');
-    tbody.innerHTML = '';
+    const container = document.getElementById('resultsContainer');
+    container.innerHTML = '';
 
     results.forEach((result, index) => {
-        document.getElementById(`location${index + 1}Header`).textContent = result.location;
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'result-section';
+        resultDiv.innerHTML = `
+            <h3>${result.location}</h3>
+            <p>Take-Home Pay: $${result.takehomePay.toFixed(2)}</p>
+            <p>Annual Expenses: $${result.annualExpenses.toFixed(2)}</p>
+            <p>Remaining Money: <span style="color: ${result.remainingMoney >= 0 ? 'green' : 'red'}">$${result.remainingMoney.toFixed(2)}</span></p>
+            <button class="toggle-breakdown" onclick="toggleBreakdown('breakdown-${index}')">Show Breakdown</button>
+            <div id="breakdown-${index}" class="breakdown">
+                <h4>Detailed Breakdown</h4>
+                <table>
+                    <tr><td>Gross Pay:</td><td>$${result.grossPay.toFixed(2)}</td></tr>
+                    <tr><td>Federal Tax:</td><td>$${result.federalTax.toFixed(2)}</td></tr>
+                    <tr><td>State Tax:</td><td>$${result.stateTax.toFixed(2)}</td></tr>
+                    <tr><td>Local Tax:</td><td>$${result.localTax.toFixed(2)}</td></tr>
+                    <tr><td>Social Security:</td><td>$${result.socialSecurity.toFixed(2)}</td></tr>
+                    <tr><td>Medicare:</td><td>$${result.medicare.toFixed(2)}</td></tr>
+                    <tr><td>Total Tax:</td><td>$${result.totalTax.toFixed(2)}</td></tr>
+                    <tr><td>Take-Home Pay:</td><td>$${result.takehomePay.toFixed(2)}</td></tr>
+                    <tr><td>Cost of Living Index:</td><td>${result.costIndex.toFixed(2)}</td></tr>
+                    <tr><td>Estimated Annual Expenses:</td><td>$${result.annualExpenses.toFixed(2)}</td></tr>
+                    <tr><td>Remaining Money:</td><td>$${result.remainingMoney.toFixed(2)}</td></tr>
+                </table>
+            </div>
+        `;
+        container.appendChild(resultDiv);
     });
+}
 
-    const categories = [
-        { name: 'Take-Home Pay', key: 'takehomePay' },
-        { name: 'Annual Expenses', key: 'annualExpenses' },
-        { name: 'Remaining Money', key: 'remainingMoney' }
-    ];
-
-    categories.forEach(category => {
-        const row = tbody.insertRow();
-        const cellCategory = row.insertCell();
-        cellCategory.textContent = category.name;
-
-        results.forEach(result => {
-            const cell = row.insertCell();
-            const value = result[category.key];
-            cell.textContent = `$${value.toFixed(2)}`;
-            
-            // Add color coding for Remaining Money
-            if (category.key === 'remainingMoney') {
-                if (value > 0) {
-                    cell.style.color = 'green';
-                } else if (value < 0) {
-                    cell.style.color = 'red';
-                }
-            }
-        });
-    });
+function formatMoney(amount) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 }
 
     </script>
