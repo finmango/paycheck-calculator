@@ -21,13 +21,13 @@
         .header { text-align: left; margin-bottom: 20px; }
         .logo { max-width: 200px; height: auto; margin-bottom: 10px; }
         .location-input { display: flex; gap: 10px; align-items: flex-end; }
-        .location-input input { flex-grow: 1; }
+        .location-input input, .location-input select { flex-grow: 1; }
         .location-input button { flex-shrink: 0; }
     </style>
 </head>
 <body>
     <div class="header">
-        <img src="logo.png" alt="FinMango and ModernHusbands Logo" class="logo">
+        <img src="https://via.placeholder.com/200x50.png?text=FinMango+Logo" alt="FinMango Logo" class="logo">
         <h1>Advanced Paycheck Calculator</h1>
     </div>
 
@@ -127,132 +127,131 @@
     </div>
 
     <script>
-        // </body>
-</html>
-// Sample data for locations, tax rates, and cost of living (you'd replace this with real data)
-const locations = [
-    { 
-        name: "New York, NY", 
-        stateTax: 0.0685, 
-        localTax: 0.03876,
-        costOfLiving: {
-            housing: 3000,
-            transportation: 150,
-            food: 500,
-            utilities: 150,
-            healthcare: 400,
-            other: 500
-        }
-    },
-    { 
-        name: "Los Angeles, CA", 
-        stateTax: 0.0930, 
-        localTax: 0,
-        costOfLiving: {
-            housing: 2500,
-            transportation: 200,
-            food: 400,
-            utilities: 120,
-            healthcare: 350,
-            other: 450
-        }
-    },
-    { 
-        name: "Chicago, IL", 
-        stateTax: 0.0495, 
-        localTax: 0.0925,
-        costOfLiving: {
-            housing: 1800,
-            transportation: 100,
-            food: 350,
-            utilities: 130,
-            healthcare: 300,
-            other: 400
-        }
-    },
-    { 
-        name: "Houston, TX", 
-        stateTax: 0, 
-        localTax: 0,
-        costOfLiving: {
-            housing: 1500,
-            transportation: 120,
-            food: 300,
-            utilities: 140,
-            healthcare: 320,
-            other: 380
-        }
-    },
-    { 
-        name: "Phoenix, AZ", 
-        stateTax: 0.0459, 
-        localTax: 0,
-        costOfLiving: {
-            housing: 1400,
-            transportation: 110,
-            food: 280,
-            utilities: 150,
-            healthcare: 310,
-            other: 360
-        }
-    },
-    { 
-        name: "Philadelphia, PA", 
-        stateTax: 0.0307, 
-        localTax: 0.038907,
-        costOfLiving: {
-            housing: 1600,
-            transportation: 130,
-            food: 320,
-            utilities: 135,
-            healthcare: 330,
-            other: 390
-        }
-    },
-    // Add more locations as needed
-];
+    // Sample data for locations, tax rates, and cost of living (you'd replace this with real data)
+    const locations = [
+        { 
+            name: "New York, NY", 
+            stateTax: 0.0685, 
+            localTax: 0.03876,
+            costOfLiving: {
+                housing: 3000,
+                transportation: 150,
+                food: 500,
+                utilities: 150,
+                healthcare: 400,
+                other: 500
+            }
+        },
+        { 
+            name: "Los Angeles, CA", 
+            stateTax: 0.0930, 
+            localTax: 0,
+            costOfLiving: {
+                housing: 2500,
+                transportation: 200,
+                food: 400,
+                utilities: 120,
+                healthcare: 350,
+                other: 450
+            }
+        },
+        { 
+            name: "Chicago, IL", 
+            stateTax: 0.0495, 
+            localTax: 0.0925,
+            costOfLiving: {
+                housing: 1800,
+                transportation: 100,
+                food: 350,
+                utilities: 130,
+                healthcare: 300,
+                other: 400
+            }
+        },
+        { 
+            name: "Houston, TX", 
+            stateTax: 0, 
+            localTax: 0,
+            costOfLiving: {
+                housing: 1500,
+                transportation: 120,
+                food: 300,
+                utilities: 140,
+                healthcare: 320,
+                other: 380
+            }
+        },
+        { 
+            name: "Phoenix, AZ", 
+            stateTax: 0.0459, 
+            localTax: 0,
+            costOfLiving: {
+                housing: 1400,
+                transportation: 110,
+                food: 280,
+                utilities: 150,
+                healthcare: 310,
+                other: 360
+            }
+        },
+        { 
+            name: "Philadelphia, PA", 
+            stateTax: 0.0307, 
+            localTax: 0.038907,
+            costOfLiving: {
+                housing: 1600,
+                transportation: 130,
+                food: 320,
+                utilities: 135,
+                healthcare: 330,
+                other: 390
+            }
+        },
+    ];
 
-// Populate location dropdowns
-function populateLocations() {
-    const selects = [document.getElementById('location1'), document.getElementById('location2'), document.getElementById('location3')];
-    selects.forEach(select => {
-        select.innerHTML = '<option value="">Select a location</option>';
-        locations.forEach(location => {
-            const option = document.createElement('option');
-            option.value = location.name;
-            option.textContent = location.name;
-            select.appendChild(option);
+    // Populate location dropdowns
+    function populateLocations() {
+        const selects = [document.getElementById('location1'), document.getElementById('location2'), document.getElementById('location3')];
+        selects.forEach(select => {
+            select.innerHTML = '<option value="">Select a location</option>';
+            locations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location.name;
+                option.textContent = location.name;
+                select.appendChild(option);
+            });
         });
-    });
-}
-
-function showPage(pageId) {
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-}
-
-function searchLocation(index) {
-    const cityInput = document.getElementById(`cityInput${index}`).value;
-    const zipInput = document.getElementById(`zipInput${index}`).value;
-    const select = document.getElementById(`location${index}`);
-
-    // In a real application, you would make an API call here to get the location data
-    // For this example, we'll just use the first matching city in our sample data
-    let matchedLocation;
-    if (cityInput) {
-        matchedLocation = locations.find(loc => loc.name.toLowerCase().includes(cityInput.toLowerCase()));
-    } else if (zipInput) {
-        // For this example, we'll just pretend the zip code matches the first location
-        matchedLocation = locations[0];
     }
 
-    if (matchedLocation) {
-        select.value = matchedLocation.name;
-    } else {
-        alert("Location not found. Please try again or select from the dropdown.");
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
     }
-}
 
+    function searchLocation(index) {
+        const cityInput = document.getElementById(`cityInput${index}`).value;
+        const zipInput = document.getElementById(`zipInput${index}`).value;
+        const select = document.getElementById(`location${index}`);
+
+        // In a real application, you would make an API call here to get the location data
+        // For this example, we'll just use the first matching city in our sample data
+        let matchedLocation;
+        if (cityInput) {
+            matchedLocation = locations.find(loc => loc.name.toLowerCase().includes(cityInput.toLowerCase()));
+        } else if (zipInput) {
+            // For this example, we'll just pretend the zip code matches the first location
+            matchedLocation = locations[0];
+        }
+
+        if (matchedLocation) {
+            select.value = matchedLocation.name;
+        } else {
+            alert("Location not found. Please try again or select from the dropdown.");
+        }
+    }
+
+    // Initialize the calculator
+    populateLocations();
 function calculateResults() {
     const salary = parseFloat(document.getElementById('salary').value);
     const selectedLocations = [
@@ -352,7 +351,6 @@ function displayResults(results) {
     });
 }
 
-// Initialize the calculator
-populateLocations();
-
     </script>
+</body>
+</html>
