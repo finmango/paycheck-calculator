@@ -137,18 +137,31 @@
         }
         .bar-graph {
             width: 100%;
+            height: 300px;
             margin-bottom: 20px;
+            position: relative;
         }
         .bar {
-            height: 30px;
-            margin-bottom: 10px;
-            background-color: #1976D2;
-            transition: width 0.5s ease-in-out;
+            position: absolute;
+            bottom: 50%;
+            width: 40px;
+            transition: height 0.5s ease-in-out;
         }
         .bar-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 12px;
+        }
+        .x-axis {
+            position: absolute;
+            bottom: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #333;
         }
         @media (max-width: 600px) {
             button {
@@ -276,8 +289,8 @@
         { name: "Seattle, WA", stateTax: 0, localTax: 0, costIndex: 1.5 },
         { name: "St. Louis, MO", stateTax: 0.054, localTax: 0.01, costIndex: 0.9 },
         { name: "Tampa, FL", stateTax: 0, localTax: 0, costIndex: 1.0 },
-        { name: "Washington, DC", stateTax: 0.0895, localTax: 0, costIndex: 1.5 }
-    ];
+        { name: "Washington, DC", stateTax: 0.0895, localTax: 0, costIndex: 1.5
+];
 
     function populateLocations() {
         const selects = [document.getElementById('location1'), document.getElementById('location2'), document.getElementById('location3')];
@@ -287,7 +300,7 @@
                 const option = document.createElement('option');
                 option.value = location.name;
                 option.textContent = location.name;
-select.appendChild(option);
+                select.appendChild(option);
             });
         });
     }
@@ -365,35 +378,43 @@ select.appendChild(option);
         const container = document.getElementById('resultsContainer');
         container.innerHTML = '';
 
-        // Add bar graph
+        // Add improved bar graph
         const graphDiv = document.createElement('div');
         graphDiv.className = 'section';
         graphDiv.innerHTML = '<h3>Comparison of Remaining Money</h3>';
         const barGraph = document.createElement('div');
         barGraph.className = 'bar-graph';
 
-        const maxRemaining = Math.max(...results.map(r => r.remainingMoney));
+        const maxAbsRemaining = Math.max(...results.map(r => Math.abs(r.remainingMoney)));
+        const barWidth = 100 / results.length;
 
-        results.forEach(result => {
-            const barContainer = document.createElement('div');
-            const barLabel = document.createElement('div');
-            barLabel.className = 'bar-label';
-            barLabel.innerHTML = `<span>${result.location}</span><span>${formatMoney(result.remainingMoney)}</span>`;
-            
+        results.forEach((result, index) => {
             const bar = document.createElement('div');
             bar.className = 'bar';
-            const barWidth = (result.remainingMoney / maxRemaining) * 100;
+            const height = (Math.abs(result.remainingMoney) / maxAbsRemaining) * 50;
+            bar.style.height = `${height}%`;
+            bar.style.left = `${index * barWidth}%`;
             bar.style.width = `${barWidth}%`;
+            bar.style.backgroundColor = result.remainingMoney >= 0 ? '#4CAF50' : '#F44336';
+            bar.style.bottom = result.remainingMoney >= 0 ? '50%' : `calc(50% - ${height}%)`;
 
-            barContainer.appendChild(barLabel);
-            barContainer.appendChild(bar);
-            barGraph.appendChild(barContainer);
+            const label = document.createElement('div');
+            label.className = 'bar-label';
+            label.textContent = result.location;
+            label.style.left = `${index * barWidth + barWidth / 2}%`;
+
+            barGraph.appendChild(bar);
+            barGraph.appendChild(label);
         });
+
+        const xAxis = document.createElement('div');
+        xAxis.className = 'x-axis';
+        barGraph.appendChild(xAxis);
 
         graphDiv.appendChild(barGraph);
         container.appendChild(graphDiv);
 
-        // Existing detailed results
+        // Detailed results
         results.forEach((result, index) => {
             const resultDiv = document.createElement('div');
             resultDiv.className = 'section';
