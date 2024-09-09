@@ -283,8 +283,16 @@
     }
 
     function showPage(pageId) {
-        document.querySelectorAll('.page
-document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(
+<!DOCTYPE html>
+<html lang="en">
+<!-- ... (previous HTML and CSS code remains the same) ... -->
+
+<script>
+    // ... (previous JavaScript code remains the same) ...
+
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
     }
 
