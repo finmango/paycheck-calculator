@@ -143,7 +143,6 @@
         }
         .bar {
             position: absolute;
-            bottom: 50%;
             width: 40px;
             transition: height 0.5s ease-in-out;
         }
@@ -289,10 +288,9 @@
         { name: "Seattle, WA", stateTax: 0, localTax: 0, costIndex: 1.5 },
         { name: "St. Louis, MO", stateTax: 0.054, localTax: 0.01, costIndex: 0.9 },
         { name: "Tampa, FL", stateTax: 0, localTax: 0, costIndex: 1.0 },
-        { name: "Washington, DC", stateTax: 0.0895, localTax: 0, costIndex: 1.5
-];
-
-    function populateLocations() {
+        { name: "Washington, DC", stateTax: 0.0895, localTax: 0, costIndex: 1.5 }
+    ];
+function populateLocations() {
         const selects = [document.getElementById('location1'), document.getElementById('location2'), document.getElementById('location3')];
         selects.forEach(select => {
             select.innerHTML = '<option value="">Select a city</option>';
@@ -378,7 +376,7 @@
         const container = document.getElementById('resultsContainer');
         container.innerHTML = '';
 
-        // Add improved bar graph
+        // Add simplified bar graph
         const graphDiv = document.createElement('div');
         graphDiv.className = 'section';
         graphDiv.innerHTML = '<h3>Comparison of Remaining Money</h3>';
