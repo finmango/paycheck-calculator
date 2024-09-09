@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Paycheck Calculator</title>
+    <title>Detailed Paycheck Calculator</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; line-height: 1.6; }
         h1, h2, h3 { color: #333; }
@@ -29,21 +29,19 @@
 <body>
     <div class="header">
         <img src="finmango.png" alt="FinMango Logo" class="logo">
-        <h1>Global Paycheck Calculator</h1>
+        <h1>Detailed Paycheck Calculator</h1>
     </div>
 
     <div id="introPage" class="page active">
-        <h2>Welcome to Your Comprehensive Global Paycheck Calculator</h2>
+        <h2>Welcome to Your Comprehensive Paycheck Calculator</h2>
         <div class="explanation">
-            <p>This calculator helps you evaluate your financial situation across different cities worldwide. It considers factors such as:</p>
+            <p>This calculator, by <a href="https://finmango.org" target="_blank">FinMango</a>, helps you evaluate your financial situation across different cities in the United States. It considers factors such as:</p>
             <ul>
                 <li>Your annual salary</li>
-                <li>Federal, state, and local taxes (for U.S. cities)</li>
-                <li>Estimated tax rates for international cities</li>
+                <li>Federal, state, and local taxes</li>
                 <li>Cost of living components</li>
-                <li>Currency conversion for international comparisons</li>
             </ul>
-            <p>Compare up to three cities to help make informed decisions about where to live and work globally.</p>
+            <p>Compare up to three cities to help make informed decisions about where to live and work.</p>
         </div>
         <button onclick="showPage('locationPage')">Let's Get Started</button>
     </div>
@@ -51,7 +49,7 @@
     <div id="locationPage" class="page">
         <h2>Select Cities to Compare</h2>
         <div class="explanation">
-            <p>Choose up to three cities you'd like to compare. You can mix U.S. and international cities.</p>
+            <p>Choose up to three cities you'd like to compare.</p>
         </div>
         <div class="form-group">
             <label for="location1">City 1:</label>
@@ -72,10 +70,10 @@
     <div id="salaryPage" class="page">
         <h2>Enter Your Salary Information</h2>
         <div class="explanation">
-            <p>Provide your annual salary in USD. This information will be used to calculate your take-home pay after taxes and compare it with the cost of living in each selected city.</p>
+            <p>Provide your annual salary. This information will be used to calculate your take-home pay after taxes and compare it with the cost of living in each selected city.</p>
         </div>
         <div class="form-group">
-            <label for="salary">Annual Salary (USD):</label>
+            <label for="salary">Annual Salary ($):</label>
             <input type="number" id="salary" required>
         </div>
         <button onclick="showPage('locationPage')">Previous</button>
@@ -83,103 +81,49 @@
     </div>
 
     <div id="resultsPage" class="page">
-        <h2>Your Global Paycheck and Cost of Living Comparison</h2>
+        <h2>Your Paycheck and Cost of Living Comparison</h2>
         <div class="explanation">
-            <p>Below is a summary of your financial situation in each selected city. This includes your estimated take-home pay and annual expenses. Click "Show Breakdown" to see detailed calculations.</p>
+            <p>Below is a summary of your financial situation in each selected city. This includes your take-home pay and annual expenses. Click "Show Breakdown" to see detailed calculations.</p>
         </div>
-        <div id="resultsContainer"></div>
-        <button onclick="resetCalculator()">Start Over</button>
+        <div id="resultsContainer">
+            <!-- Results will be inserted here by JavaScript -->
+        </div>
+        <button onclick="showPage('locationPage')">Start Over</button>
     </div>
 
     <script>
+    // Sample data for cities, tax rates, and cost of living (you'd replace this with real data)
     const locations = [
-        { name: "New York, NY", country: "USA", stateTax: 0.0685, localTax: 0.03876, costIndex: 1.8, currency: "USD" },
-        { name: "Los Angeles, CA", country: "USA", stateTax: 0.0930, localTax: 0, costIndex: 1.5, currency: "USD" },
-        { name: "Chicago, IL", country: "USA", stateTax: 0.0495, localTax: 0.0925, costIndex: 1.2, currency: "USD" },
-        { name: "Houston, TX", country: "USA", stateTax: 0, localTax: 0, costIndex: 0.95, currency: "USD" },
-        { name: "Phoenix, AZ", country: "USA", stateTax: 0.0459, localTax: 0, costIndex: 1.05, currency: "USD" },
-        { name: "Philadelphia, PA", country: "USA", stateTax: 0.0307, localTax: 0.038907, costIndex: 1.15, currency: "USD" },
-        { name: "San Antonio, TX", country: "USA", stateTax: 0, localTax: 0, costIndex: 0.9, currency: "USD" },
-        { name: "San Diego, CA", country: "USA", stateTax: 0.0930, localTax: 0, costIndex: 1.6, currency: "USD" },
-        { name: "Dallas, TX", country: "USA", stateTax: 0, localTax: 0, costIndex: 1.05, currency: "USD" },
-        { name: "San Jose, CA", country: "USA", stateTax: 0.0930, localTax: 0, costIndex: 1.8, currency: "USD" },
-        { name: "Austin, TX", country: "USA", stateTax: 0, localTax: 0, costIndex: 1.1, currency: "USD" },
-        { name: "Jacksonville, FL", country: "USA", stateTax: 0, localTax: 0, costIndex: 0.95, currency: "USD" },
-        { name: "San Francisco, CA", country: "USA", stateTax: 0.0930, localTax: 0, costIndex: 1.9, currency: "USD" },
-        { name: "Columbus, OH", country: "USA", stateTax: 0.0399, localTax: 0.025, costIndex: 0.95, currency: "USD" },
-        { name: "Fort Worth, TX", country: "USA", stateTax: 0, localTax: 0, costIndex: 1.0, currency: "USD" },
-        { name: "Indianapolis, IN", country: "USA", stateTax: 0.0323, localTax: 0.0202, costIndex: 0.9, currency: "USD" },
-        { name: "Charlotte, NC", country: "USA", stateTax: 0.0525, localTax: 0, costIndex: 1.0, currency: "USD" },
-        { name: "Seattle, WA", country: "USA", stateTax: 0, localTax: 0, costIndex: 1.5, currency: "USD" },
-        { name: "Denver, CO", country: "USA", stateTax: 0.0455, localTax: 0, costIndex: 1.2, currency: "USD" },
-        { name: "Washington, D.C.", country: "USA", stateTax: 0.0895, localTax: 0, costIndex: 1.6, currency: "USD" },
-        { name: "Boston, MA", country: "USA", stateTax: 0.05, localTax: 0, costIndex: 1.5, currency: "USD" },
-        { name: "El Paso, TX", country: "USA", stateTax: 0, localTax: 0, costIndex: 0.85, currency: "USD" },
-        { name: "Nashville, TN", country: "USA", stateTax: 0, localTax: 0, costIndex: 1.05, currency: "USD" },
-        { name: "Detroit, MI", country: "USA", stateTax: 0.0425, localTax: 0.0245, costIndex: 0.9, currency: "USD" },
-        { name: "Oklahoma City, OK", country: "USA", stateTax: 0.05, localTax: 0, costIndex: 0.85, currency: "USD" },
-        { name: "Portland, OR", country: "USA", stateTax: 0.0875, localTax: 0, costIndex: 1.2, currency: "USD" },
-        { name: "Las Vegas, NV", country: "USA", stateTax: 0, localTax: 0, costIndex: 1.05, currency: "USD" },
-        { name: "Memphis, TN", country: "USA", stateTax: 0, localTax: 0, costIndex: 0.85, currency: "USD" },
-        { name: "Louisville, KY", country: "USA", stateTax: 0.05, localTax: 0.02, costIndex: 0.9, currency: "USD" },
-        { name: "Baltimore, MD", country: "USA", stateTax: 0.0575, localTax: 0.032, costIndex: 1.1, currency: "USD" },
-{ name: "Milwaukee, WI", country: "USA", stateTax: 0.0765, localTax: 0, costIndex: 0.95, currency: "USD" },
-        { name: "Albuquerque, NM", country: "USA", stateTax: 0.049, localTax: 0, costIndex: 0.95, currency: "USD" },
-        { name: "Tucson, AZ", country: "USA", stateTax: 0.0459, localTax: 0, costIndex: 0.95, currency: "USD" },
-        { name: "Fresno, CA", country: "USA", stateTax: 0.0930, localTax: 0, costIndex: 1.1, currency: "USD" },
-        { name: "Sacramento, CA", country: "USA", stateTax: 0.0930, localTax: 0, costIndex: 1.2, currency: "USD" },
-        { name: "Long Beach, CA", country: "USA", stateTax: 0.0930, localTax: 0, costIndex: 1.5, currency: "USD" },
-        { name: "Kansas City, MO", country: "USA", stateTax: 0.054, localTax: 0.01, costIndex: 0.9, currency: "USD" },
-        { name: "Mesa, AZ", country: "USA", stateTax: 0.0459, localTax: 0, costIndex: 1.05, currency: "USD" },
-        { name: "Atlanta, GA", country: "USA", stateTax: 0.0575, localTax: 0, costIndex: 1.0, currency: "USD" },
-        { name: "London", country: "UK", taxRate: 0.30, costIndex: 1.7, currency: "GBP" },
-        { name: "Tokyo", country: "Japan", taxRate: 0.25, costIndex: 1.6, currency: "JPY" },
-        { name: "Paris", country: "France", taxRate: 0.35, costIndex: 1.5, currency: "EUR" },
-        { name: "Sydney", country: "Australia", taxRate: 0.32, costIndex: 1.4, currency: "AUD" },
-        { name: "Toronto", country: "Canada", taxRate: 0.28, costIndex: 1.3, currency: "CAD" },
-        { name: "Berlin", country: "Germany", taxRate: 0.33, costIndex: 1.2, currency: "EUR" },
-        { name: "Singapore", country: "Singapore", taxRate: 0.20, costIndex: 1.5, currency: "SGD" },
-        { name: "Dubai", country: "UAE", taxRate: 0.05, costIndex: 1.3, currency: "AED" },
-        { name: "Mumbai", country: "India", taxRate: 0.30, costIndex: 0.8, currency: "INR" },
-        { name: "São Paulo", country: "Brazil", taxRate: 0.27, costIndex: 0.9, currency: "BRL" }
+        { name: "New York, NY", stateTax: 0.0685, localTax: 0.03876, costIndex: 1.8 },
+        { name: "Los Angeles, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.5 },
+        { name: "Chicago, IL", stateTax: 0.0495, localTax: 0.0925, costIndex: 1.2 },
+        { name: "Houston, TX", stateTax: 0, localTax: 0, costIndex: 0.95 },
+        { name: "Phoenix, AZ", stateTax: 0.0459, localTax: 0, costIndex: 1.05 },
+        { name: "Philadelphia, PA", stateTax: 0.0307, localTax: 0.038907, costIndex: 1.15 },
+        { name: "Boston, MA", stateTax: 0.05, localTax: 0, costIndex: 1.5 },
+        { name: "Miami, FL", stateTax: 0, localTax: 0, costIndex: 1.2 },
+        { name: "Atlanta, GA", stateTax: 0.0575, localTax: 0, costIndex: 1.0 },
+        { name: "Cleveland, OH", stateTax: 0.0399, localTax: 0.02, costIndex: 0.9 },
+        { name: "Cincinnati, OH", stateTax: 0.0399, localTax: 0.021, costIndex: 0.9 },
+        { name: "Columbus, OH", stateTax: 0.0399, localTax: 0.025, costIndex: 0.95 },
+        { name: "Nashville, TN", stateTax: 0, localTax: 0, costIndex: 1.05 },
+        { name: "Austin, TX", stateTax: 0, localTax: 0, costIndex: 1.1 },
+        { name: "Seattle, WA", stateTax: 0, localTax: 0, costIndex: 1.5 },
+        { name: "San Francisco, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.9 },
+        { name: "Minneapolis, MN", stateTax: 0.0785, localTax: 0, costIndex: 1.05 }
     ];
 
-    const exchangeRates = {
-        USD: 1,
-        GBP: 0.72,
-        JPY: 110.59,
-        EUR: 0.84,
-        AUD: 1.33,
-        CAD: 1.25,
-        SGD: 1.34,
-        AED: 3.67,
-        INR: 74.24,
-        BRL: 5.24
-    };
-
+    // Populate location dropdowns
     function populateLocations() {
         const selects = [document.getElementById('location1'), document.getElementById('location2'), document.getElementById('location3')];
         selects.forEach(select => {
             select.innerHTML = '<option value="">Select a city</option>';
-            
-            const usGroup = document.createElement('optgroup');
-            usGroup.label = 'United States';
-            const intGroup = document.createElement('optgroup');
-            intGroup.label = 'International';
-            
             locations.forEach(location => {
                 const option = document.createElement('option');
                 option.value = location.name;
                 option.textContent = location.name;
-                if (location.country === "USA") {
-                    usGroup.appendChild(option);
-                } else {
-                    intGroup.appendChild(option);
-                }
+                select.appendChild(option);
             });
-            
-            select.appendChild(usGroup);
-            select.appendChild(intGroup);
         });
     }
 
@@ -193,194 +137,99 @@
         breakdown.classList.toggle('active');
     }
 
-    function calculateFederalTax(salary) {
-        if (salary <= 11000) return salary * 0.10;
-        if (salary <= 44725) return 1100 + (salary - 11000) * 0.12;
-        if (salary <= 95375) return 5147 + (salary - 44725) * 0.22;
-        if (salary <= 182100) return 16290 + (salary - 95375) * 0.24;
-        if (salary <= 231250) return 37104 + (salary - 182100) * 0.32;
-        if (salary <= 578125) return 52832 + (salary - 231250) * 0.35;
-        return 174238.25 + (salary - 578125) * 0.37;
-    }
+    // Initialize the calculator
+    populateLocations();
+function calculateResults() {
+    const salary = parseFloat(document.getElementById('salary').value);
+    const selectedLocations = [
+        document.getElementById('location1').value,
+        document.getElementById('location2').value,
+        document.getElementById('location3').value
+    ].filter(Boolean);
 
-    function calculateUSTakeHomePay(salary, location) {
+    const results = selectedLocations.map(locationName => {
+        const location = locations.find(loc => loc.name === locationName);
         const federalTax = calculateFederalTax(salary);
         const stateTax = salary * location.stateTax;
         const localTax = salary * location.localTax;
-        const socialSecurity = Math.min(salary * 0.062, 9932.40);
+        const socialSecurity = Math.min(salary * 0.062, 9114); // 2021 cap
         const medicare = salary * 0.0145;
         const totalTax = federalTax + stateTax + localTax + socialSecurity + medicare;
-        return salary - totalTax;
-    }
+        const takehomePay = salary - totalTax;
 
-    function calculateInternationalTakeHomePay(salary, location) {
-        const totalTax = salary * location.taxRate;
-        return salary - totalTax;
-    }
+        // Estimate annual expenses based on cost of living index
+        const baseExpenses = 40000; // Baseline annual expenses for a cost index of 1.0
+        const annualExpenses = baseExpenses * location.costIndex;
 
-    function convertToLocalCurrency(amountUSD, currency) {
-        return amountUSD / exchangeRates[currency];
-    }
+        return {
+            location: locationName,
+            grossPay: salary,
+            federalTax: federalTax,
+            stateTax: stateTax,
+            localTax: localTax,
+            socialSecurity: socialSecurity,
+            medicare: medicare,
+            totalTax: totalTax,
+            takehomePay: takehomePay,
+            annualExpenses: annualExpenses,
+            remainingMoney: takehomePay - annualExpenses,
+            costIndex: location.costIndex
+        };
+    });
 
-    function formatCurrency(amount, currency) {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: currency,
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        }).format(amount);
-    }
+    displayResults(results);
+    showPage('resultsPage');
+}
 
-    function calculateResults() {
-        const salary = parseFloat(document.getElementById('salary').value);
-        const selectedLocations = [
-            document.getElementById('location1').value,
-            document.getElementById('location2').value,
-            document.getElementById('location3').value
-        ].filter(Boolean);
+function calculateFederalTax(salary) {
+    // 2021 tax brackets (simplified)
+    if (salary <= 9950) return salary * 0.10;
+    if (salary <= 40525) return 995 + (salary - 9950) * 0.12;
+    if (salary <= 86375) return 4664 + (salary - 40525) * 0.22;
+    if (salary <= 164925) return 14751 + (salary - 86375) * 0.24;
+    if (salary <= 209425) return 33603 + (salary - 164925) * 0.32;
+    if (salary <= 523600) return 47843 + (salary - 209425) * 0.35;
+    return 157804.25 + (salary - 523600) * 0.37;
+}
 
-        const results = selectedLocations.map(locationName => {
-            const location = locations.find(loc => loc.name === locationName);
-            let takehomePay, taxPaid;
-
-            if (location.country === "USA") {
-                takehomePay = calculateUSTakeHomePay(salary, location);
-                taxPaid = salary - takehomePay;
-            } else {
-                takehomePay = calculateInternationalTakeHomePay(salary, location);
-                taxPaid = salary - takehomePay;
-            }
-
-            const localCurrencyTakeHome = convertToLocalCurrency(takehomePay, location.currency);
-            const localCurrencyTaxPaid = convertToLocalCurrency(taxPaid, location.currency);
-
-            const baseExpenses = 40000;
-            const annualExpensesUSD = baseExpenses * location.costIndex;
-            const annualExpensesLocal = convertToLocalCurrency(annualExpensesUSD, location.currency);
-
-            return {
-                location: locationName,
-                country: location.country,
-                currency: location.currency,
-                grossPayUSD: salary,
-                grossPayLocal: convertToLocalCurrency(salary, location.currency),
-                takehomePayUSD: takehomePay,
-                takehomePayLocal: localCurrencyTakeHome,
-                taxPaidUSD: taxPaid,
-                taxPaidLocal: localCurrencyTaxPaid,
-                annualExpensesUSD: annualExpensesUSD,
-                annualExpensesLocal: annualExpensesLocal,
-                remainingMoneyUSD: takehomePay - annualExpensesUSD,
-                remainingMoneyLocal: localCurrencyTakeHome - annualExpensesLocal,
-                costIndex: location.costIndex
-            };
-        });
-
-        displayResults(results);
-        showPage('resultsPage');
-    }
 function displayResults(results) {
-        const container = document.getElementById('resultsContainer');
-        container.innerHTML = '';
+    const container = document.getElementById('resultsContainer');
+    container.innerHTML = '';
 
-        results.forEach((result, index) => {
-            const resultDiv = document.createElement('div');
-            resultDiv.className = 'result-section';
-            resultDiv.innerHTML = `
-                <h3>${result.location}, ${result.country}</h3>
-                <p>Gross Pay: ${formatCurrency(result.grossPayUSD, 'USD')} (${formatCurrency(result.grossPayLocal, result.currency)})</p>
-                <p>Take-Home Pay: ${formatCurrency(result.takehomePayUSD, 'USD')} (${formatCurrency(result.takehomePayLocal, result.currency)})</p>
-                <p>Annual Expenses: ${formatCurrency(result.annualExpensesUSD, 'USD')} (${formatCurrency(result.annualExpensesLocal, result.currency)})</p>
-                <p>Remaining Money: <span style="color: ${result.remainingMoneyUSD >= 0 ? 'green' : 'red'}">${formatCurrency(result.remainingMoneyUSD, 'USD')} (${formatCurrency(result.remainingMoneyLocal, result.currency)})</span></p>
-                <button class="toggle-breakdown" onclick="toggleBreakdown('breakdown-${index}')">Show Breakdown</button>
-                <div id="breakdown-${index}" class="breakdown">
-                    <h4>Detailed Breakdown</h4>
-                    <table>
-                        <tr><td>Gross Pay:</td><td>${formatCurrency(result.grossPayUSD, 'USD')} (${formatCurrency(result.grossPayLocal, result.currency)})</td></tr>
-                        <tr><td>Tax Paid:</td><td>${formatCurrency(result.taxPaidUSD, 'USD')} (${formatCurrency(result.taxPaidLocal, result.currency)})</td></tr>
-                        <tr><td>Take-Home Pay:</td><td>${formatCurrency(result.takehomePayUSD, 'USD')} (${formatCurrency(result.takehomePayLocal, result.currency)})</td></tr>
-                        <tr><td>Cost of Living Index:</td><td>${result.costIndex.toFixed(2)}</td></tr>
-                        <tr><td>Estimated Annual Expenses:</td><td>${formatCurrency(result.annualExpensesUSD, 'USD')} (${formatCurrency(result.annualExpensesLocal, result.currency)})</td></tr>
-                        <tr><td>Remaining Money:</td><td>${formatCurrency(result.remainingMoneyUSD, 'USD')} (${formatCurrency(result.remainingMoneyLocal, result.currency)})</td></tr>
-                    </table>
-                </div>
-            `;
-            container.appendChild(resultDiv);
-        });
-    }
-
-    function resetCalculator() {
-        document.getElementById('salary').value = '';
-        document.getElementById('location1').value = '';
-        document.getElementById('location2').value = '';
-        document.getElementById('location3').value = '';
-        document.getElementById('resultsContainer').innerHTML = '';
-        showPage('introPage');
-    }
-
-    function validateInput() {
-        const salary = document.getElementById('salary').value;
-        const location1 = document.getElementById('location1').value;
-        
-        if (!salary || salary <= 0) {
-            alert("Please enter a valid salary.");
-            return false;
-        }
-        
-        if (!location1) {
-            alert("Please select at least one location.");
-            return false;
-        }
-        
-        return true;
-    }
-
-    document.querySelector('button[onclick="calculateResults()"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        if (validateInput()) {
-            calculateResults();
-        }
+    results.forEach((result, index) => {
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'result-section';
+        resultDiv.innerHTML = `
+            <h3>${result.location}</h3>
+            <p>Take-Home Pay: $${result.takehomePay.toFixed(2)}</p>
+            <p>Annual Expenses: $${result.annualExpenses.toFixed(2)}</p>
+            <p>Remaining Money: <span style="color: ${result.remainingMoney >= 0 ? 'green' : 'red'}">$${result.remainingMoney.toFixed(2)}</span></p>
+            <button class="toggle-breakdown" onclick="toggleBreakdown('breakdown-${index}')">Show Breakdown</button>
+            <div id="breakdown-${index}" class="breakdown">
+                <h4>Detailed Breakdown</h4>
+                <table>
+                    <tr><td>Gross Pay:</td><td>$${result.grossPay.toFixed(2)}</td></tr>
+                    <tr><td>Federal Tax:</td><td>$${result.federalTax.toFixed(2)}</td></tr>
+                    <tr><td>State Tax:</td><td>$${result.stateTax.toFixed(2)}</td></tr>
+                    <tr><td>Local Tax:</td><td>$${result.localTax.toFixed(2)}</td></tr>
+                    <tr><td>Social Security:</td><td>$${result.socialSecurity.toFixed(2)}</td></tr>
+                    <tr><td>Medicare:</td><td>$${result.medicare.toFixed(2)}</td></tr>
+                    <tr><td>Total Tax:</td><td>$${result.totalTax.toFixed(2)}</td></tr>
+                    <tr><td>Take-Home Pay:</td><td>$${result.takehomePay.toFixed(2)}</td></tr>
+                    <tr><td>Cost of Living Index:</td><td>${result.costIndex.toFixed(2)}</td></tr>
+                    <tr><td>Estimated Annual Expenses:</td><td>$${result.annualExpenses.toFixed(2)}</td></tr>
+                    <tr><td>Remaining Money:</td><td>$${result.remainingMoney.toFixed(2)}</td></tr>
+                </table>
+            </div>
+        `;
+        container.appendChild(resultDiv);
     });
+}
 
-    document.querySelectorAll('button[onclick^="showPage"]').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const pageId = this.getAttribute('onclick').match(/'(\w+)'/)[1];
-            showPage(pageId);
-        });
-    });
+function formatMoney(amount) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+}
 
-    function handleResize() {
-        const width = window.innerWidth;
-        const resultsContainer = document.getElementById('resultsContainer');
-        if (width < 768) {
-            resultsContainer.style.flexDirection = 'column';
-        } else {
-            resultsContainer.style.flexDirection = 'row';
-        }
-    }
-
-    window.addEventListener('resize', handleResize);
-
-    function loadExchangeRates() {
-        const ratesDisplay = document.createElement('div');
-        ratesDisplay.innerHTML = '<h3>Current Exchange Rates (USD)</h3>';
-        for (const [currency, rate] of Object.entries(exchangeRates)) {
-            if (currency !== 'USD') {
-                ratesDisplay.innerHTML += `<p>${currency}: ${rate.toFixed(2)}</p>`;
-            }
-        }
-        document.body.appendChild(ratesDisplay);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        populateLocations();
-        showPage('introPage');
-        handleResize();
-        loadExchangeRates();
-    });
-
-    console.log('Global Paycheck Calculator initialized successfully!');
     </script>
 </body>
 </html>
