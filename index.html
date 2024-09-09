@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paycheck Calculator</title>
+    <title>Detailed Paycheck Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
@@ -70,7 +70,7 @@
             margin-bottom: 20px; 
         }
         .logo { 
-            max-width: 150px; 
+            max-width: 300px; 
             height: auto; 
             margin-bottom: 20px; 
             cursor: pointer; 
@@ -87,6 +87,11 @@
         .title-box h1 {
             color: white;
             margin: 0;
+        }
+        .info-link { 
+            font-size: 0.9em; 
+            margin-bottom: 5px; 
+            color: #1976D2;
         }
         .material-icons {
             vertical-align: middle;
@@ -130,6 +135,33 @@
         .toggle-breakdown:hover { 
             text-decoration: underline; 
         }
+        .bar-graph {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .bar {
+            position: absolute;
+            width: 40px;
+            transition: height 0.5s ease-in-out;
+        }
+        .bar-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 12px;
+        }
+        .x-axis {
+            position: absolute;
+            bottom: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #333;
+        }
         @media (max-width: 600px) {
             button {
                 width: 100%;
@@ -142,7 +174,7 @@
     <div class="header">
         <img src="finmango.png" alt="FinMango Logo" class="logo" onclick="showPage('introPage')">
         <div class="title-box">
-            <h1>Paycheck Calculator</h1>
+            <h1>Detailed Paycheck Calculator</h1>
         </div>
     </div>
 
@@ -258,8 +290,7 @@
         { name: "Tampa, FL", stateTax: 0, localTax: 0, costIndex: 1.0 },
         { name: "Washington, DC", stateTax: 0.0895, localTax: 0, costIndex: 1.5 }
     ];
-
-    function populateLocations() {
+function populateLocations() {
         const selects = [document.getElementById('location1'), document.getElementById('location2'), document.getElementById('location3')];
         selects.forEach(select => {
             select.innerHTML = '<option value="">Select a city</option>';
@@ -284,9 +315,6 @@
 
     function calculateFederalTax(salary) {
         if (salary <= 9950) return salary * 0.10;
-        if (salary <= 40525) return 995 +
-function calculateFederalTax(salary) {
-        if (salary <= 9950) return salary * 0.10;
         if (salary <= 40525) return 995 + (salary - 9950) * 0.12;
         if (salary <= 86375) return 4664 + (salary - 40525) * 0.22;
         if (salary <= 164925) return 14751 + (salary - 86375) * 0.24;
@@ -300,17 +328,16 @@ function calculateFederalTax(salary) {
     }
 
     function calculateResults() {
+        if (!validateForm()) {
+            return;
+        }
+        
         const salary = parseFloat(document.getElementById('salary').value.replace(/[^0-9.]/g, ''));
         const selectedLocations = [
             document.getElementById('location1').value,
             document.getElementById('location2').value,
             document.getElementById('location3').value
         ].filter(Boolean);
-
-        if (!salary || selectedLocations.length === 0) {
-            alert('Please enter your salary and select at least one location.');
-            return;
-        }
 
         const results = selectedLocations.map(locationName => {
             const location = locations.find(loc => loc.name === locationName);
@@ -349,6 +376,43 @@ function calculateFederalTax(salary) {
         const container = document.getElementById('resultsContainer');
         container.innerHTML = '';
 
+        // Add simplified bar graph
+        const graphDiv = document.createElement('div');
+        graphDiv.className = 'section';
+        graphDiv.innerHTML = '<h3>Comparison of Remaining Money</h3>';
+        const barGraph = document.createElement('div');
+        barGraph.className = 'bar-graph';
+
+        const maxAbsRemaining = Math.max(...results.map(r => Math.abs(r.remainingMoney)));
+        const barWidth = 100 / results.length;
+
+        results.forEach((result, index) => {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            const height = (Math.abs(result.remainingMoney) / maxAbsRemaining) * 50;
+            bar.style.height = `${height}%`;
+            bar.style.left = `${index * barWidth}%`;
+            bar.style.width = `${barWidth}%`;
+            bar.style.backgroundColor = result.remainingMoney >= 0 ? '#4CAF50' : '#F44336';
+            bar.style.bottom = result.remainingMoney >= 0 ? '50%' : `calc(50% - ${height}%)`;
+
+            const label = document.createElement('div');
+            label.className = 'bar-label';
+            label.textContent = result.location;
+            label.style.left = `${index * barWidth + barWidth / 2}%`;
+
+            barGraph.appendChild(bar);
+            barGraph.appendChild(label);
+        });
+
+        const xAxis = document.createElement('div');
+        xAxis.className = 'x-axis';
+        barGraph.appendChild(xAxis);
+
+        graphDiv.appendChild(barGraph);
+        container.appendChild(graphDiv);
+
+        // Detailed results
         results.forEach((result, index) => {
             const resultDiv = document.createElement('div');
             resultDiv.className = 'section';
@@ -379,6 +443,17 @@ function calculateFederalTax(salary) {
             `;
             container.appendChild(resultDiv);
         });
+    }
+
+    function validateForm() {
+        const salary = document.getElementById('salary').value.trim();
+        const location1 = document.getElementById('location1').value;
+        
+        if (!salary || !location1) {
+            alert('Please enter your salary and select at least one location.');
+            return false;
+        }
+        return true;
     }
 
     // Event listeners
