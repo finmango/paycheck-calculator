@@ -135,6 +135,21 @@
         .toggle-breakdown:hover { 
             text-decoration: underline; 
         }
+        .bar-graph {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .bar {
+            height: 30px;
+            margin-bottom: 10px;
+            background-color: #1976D2;
+            transition: width 0.5s ease-in-out;
+        }
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
         @media (max-width: 600px) {
             button {
                 width: 100%;
@@ -223,7 +238,6 @@
     </div>
 
     <script>
-    // Sample data for cities, tax rates, and cost of living (you'd replace this with real data)
     const locations = [
         { name: "Atlanta, GA", stateTax: 0.0575, localTax: 0, costIndex: 1.0 },
         { name: "Austin, TX", stateTax: 0, localTax: 0, costIndex: 1.1 },
@@ -265,8 +279,6 @@
         { name: "Washington, DC", stateTax: 0.0895, localTax: 0, costIndex: 1.5 }
     ];
 
-
-    // Populate location dropdowns
     function populateLocations() {
         const selects = [document.getElementById('location1'), document.getElementById('location2'), document.getElementById('location3')];
         selects.forEach(select => {
@@ -275,7 +287,7 @@
                 const option = document.createElement('option');
                 option.value = location.name;
                 option.textContent = location.name;
-                select.appendChild(option);
+select.appendChild(option);
             });
         });
     }
@@ -291,7 +303,6 @@
     }
 
     function calculateFederalTax(salary) {
-        // 2021 tax brackets (simplified)
         if (salary <= 9950) return salary * 0.10;
         if (salary <= 40525) return 995 + (salary - 9950) * 0.12;
         if (salary <= 86375) return 4664 + (salary - 40525) * 0.22;
@@ -322,13 +333,12 @@
             const federalTax = calculateFederalTax(salary);
             const stateTax = salary * location.stateTax;
             const localTax = salary * location.localTax;
-            const socialSecurity = Math.min(salary * 0.062, 9114); // 2021 cap
+            const socialSecurity = Math.min(salary * 0.062, 9114);
             const medicare = salary * 0.0145;
             const totalTax = federalTax + stateTax + localTax + socialSecurity + medicare;
             const takehomePay = salary - totalTax;
 
-            // Estimate annual expenses based on cost of living index
-            const baseExpenses = 40000; // Baseline annual expenses for a cost index of 1.0
+            const baseExpenses = 40000;
             const annualExpenses = baseExpenses * location.costIndex;
 
             return {
@@ -340,7 +350,7 @@
                 socialSecurity: socialSecurity,
                 medicare: medicare,
                 totalTax: totalTax,
-takehomePay: takehomePay,
+                takehomePay: takehomePay,
                 annualExpenses: annualExpenses,
                 remainingMoney: takehomePay - annualExpenses,
                 costIndex: location.costIndex
@@ -355,6 +365,35 @@ takehomePay: takehomePay,
         const container = document.getElementById('resultsContainer');
         container.innerHTML = '';
 
+        // Add bar graph
+        const graphDiv = document.createElement('div');
+        graphDiv.className = 'section';
+        graphDiv.innerHTML = '<h3>Comparison of Remaining Money</h3>';
+        const barGraph = document.createElement('div');
+        barGraph.className = 'bar-graph';
+
+        const maxRemaining = Math.max(...results.map(r => r.remainingMoney));
+
+        results.forEach(result => {
+            const barContainer = document.createElement('div');
+            const barLabel = document.createElement('div');
+            barLabel.className = 'bar-label';
+            barLabel.innerHTML = `<span>${result.location}</span><span>${formatMoney(result.remainingMoney)}</span>`;
+            
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            const barWidth = (result.remainingMoney / maxRemaining) * 100;
+            bar.style.width = `${barWidth}%`;
+
+            barContainer.appendChild(barLabel);
+            barContainer.appendChild(bar);
+            barGraph.appendChild(barContainer);
+        });
+
+        graphDiv.appendChild(barGraph);
+        container.appendChild(graphDiv);
+
+        // Existing detailed results
         results.forEach((result, index) => {
             const resultDiv = document.createElement('div');
             resultDiv.className = 'section';
@@ -400,23 +439,17 @@ takehomePay: takehomePay,
 
     // Event listeners
     document.addEventListener('DOMContentLoaded', function() {
-        // Populate location dropdowns when the page loads
         populateLocations();
 
-        // Add event listener to the salary input for real-time formatting
         const salaryInput = document.getElementById('salary');
         salaryInput.addEventListener('input', function(e) {
-            // Remove non-numeric characters
             let value = e.target.value.replace(/[^0-9]/g, '');
-            // Format the number
             if (value !== '') {
                 value = parseInt(value, 10).toLocaleString('en-US');
             }
-            // Update the input value
             e.target.value = value;
         });
 
-        // Add event listeners to location dropdowns to prevent duplicate selections
         const locationSelects = [
             document.getElementById('location1'),
             document.getElementById('location2'),
