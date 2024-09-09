@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paycheck Calculator</title>
+    <title>Detailed Paycheck Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
@@ -26,7 +26,7 @@
             font-weight: 500; 
             color: #555;
         }
-        input[type="number"], select { 
+        input[type="text"], select { 
             width: 100%; 
             padding: 10px; 
             border: 1px solid #ddd; 
@@ -34,7 +34,7 @@
             font-size: 16px;
             transition: border-color 0.3s;
         }
-        input[type="number"]:focus, select:focus {
+        input[type="text"]:focus, select:focus {
             border-color: #1976D2;
             outline: none;
         }
@@ -70,7 +70,7 @@
             margin-bottom: 20px; 
         }
         .logo { 
-            max-width: 150px; 
+            max-width: 300px; 
             height: auto; 
             margin-bottom: 20px; 
             cursor: pointer; 
@@ -147,7 +147,7 @@
     <div class="header">
         <img src="finmango.png" alt="FinMango Logo" class="logo" onclick="showPage('introPage')">
         <div class="title-box">
-            <h1>Paycheck Calculator</h1>
+            <h1>Detailed Paycheck Calculator</h1>
         </div>
     </div>
 
@@ -200,7 +200,7 @@
         <div class="section">
             <div class="form-group">
                 <label for="salary">Annual Salary ($):</label>
-                <input type="number" id="salary" required>
+                <input type="text" id="salary" required>
             </div>
         </div>
         <div class="button-container">
@@ -209,14 +209,7 @@
         </div>
     </div>
 
-    <!-- The rest of the HTML will be provided in the next part -->
-
-    <script>
-    // The JavaScript will be provided in the final part
-    </script>
-</body>
-</html>
-<div id="resultsPage" class="page">
+    <div id="resultsPage" class="page">
         <h2>Your Paycheck and Cost of Living Comparison</h2>
         <div class="explanation">
             <p><span class="material-icons">assessment</span> Below is a summary of your financial situation in each selected city. This includes your take-home pay and annual expenses. Click "Show Breakdown" to see detailed calculations.</p>
@@ -232,23 +225,25 @@
     <script>
     // Sample data for cities, tax rates, and cost of living (you'd replace this with real data)
     const locations = [
-        { name: "New York, NY", stateTax: 0.0685, localTax: 0.03876, costIndex: 1.8 },
-        { name: "Los Angeles, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.5 },
-        { name: "Chicago, IL", stateTax: 0.0495, localTax: 0.0925, costIndex: 1.2 },
-        { name: "Houston, TX", stateTax: 0, localTax: 0, costIndex: 0.95 },
-        { name: "Phoenix, AZ", stateTax: 0.0459, localTax: 0, costIndex: 1.05 },
-        { name: "Philadelphia, PA", stateTax: 0.0307, localTax: 0.038907, costIndex: 1.15 },
-        { name: "Boston, MA", stateTax: 0.05, localTax: 0, costIndex: 1.5 },
-        { name: "Miami, FL", stateTax: 0, localTax: 0, costIndex: 1.2 },
         { name: "Atlanta, GA", stateTax: 0.0575, localTax: 0, costIndex: 1.0 },
-        { name: "Cleveland, OH", stateTax: 0.0399, localTax: 0.02, costIndex: 0.9 },
-        { name: "Cincinnati, OH", stateTax: 0.0399, localTax: 0.021, costIndex: 0.9 },
-        { name: "Columbus, OH", stateTax: 0.0399, localTax: 0.025, costIndex: 0.95 },
-        { name: "Nashville, TN", stateTax: 0, localTax: 0, costIndex: 1.05 },
         { name: "Austin, TX", stateTax: 0, localTax: 0, costIndex: 1.1 },
-        { name: "Seattle, WA", stateTax: 0, localTax: 0, costIndex: 1.5 },
+        { name: "Baltimore, MD", stateTax: 0.0575, localTax: 0.032, costIndex: 1.1 },
+        { name: "Boston, MA", stateTax: 0.05, localTax: 0, costIndex: 1.5 },
+        { name: "Chicago, IL", stateTax: 0.0495, localTax: 0.0925, costIndex: 1.2 },
+        { name: "Cincinnati, OH", stateTax: 0.0399, localTax: 0.021, costIndex: 0.9 },
+        { name: "Cleveland, OH", stateTax: 0.0399, localTax: 0.02, costIndex: 0.9 },
+        { name: "Columbus, OH", stateTax: 0.0399, localTax: 0.025, costIndex: 0.95 },
+        { name: "Houston, TX", stateTax: 0, localTax: 0, costIndex: 0.95 },
+        { name: "Los Angeles, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.5 },
+        { name: "Miami, FL", stateTax: 0, localTax: 0, costIndex: 1.2 },
+        { name: "Minneapolis, MN", stateTax: 0.0785, localTax: 0, costIndex: 1.05 },
+        { name: "Nashville, TN", stateTax: 0, localTax: 0, costIndex: 1.05 },
+        { name: "New York, NY", stateTax: 0.0685, localTax: 0.03876, costIndex: 1.8 },
+        { name: "Philadelphia, PA", stateTax: 0.0307, localTax: 0.038907, costIndex: 1.15 },
+        { name: "Phoenix, AZ", stateTax: 0.0459, localTax: 0, costIndex: 1.05 },
         { name: "San Francisco, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.9 },
-        { name: "Minneapolis, MN", stateTax: 0.0785, localTax: 0, costIndex: 1.05 }
+        { name: "Seattle, WA", stateTax: 0, localTax: 0, costIndex: 1.5 },
+        { name: "Washington, DC", stateTax: 0.0895, localTax: 0, costIndex: 1.5 }
     ];
 
     // Populate location dropdowns
@@ -286,8 +281,16 @@
         return 157804.25 + (salary - 523600) * 0.37;
     }
 
+    function formatMoney(amount) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    }
+
     function calculateResults() {
-        const salary = parseFloat(document.getElementById('salary').value);
+        if (!validateForm()) {
+            return;
+        }
+        
+        const salary = parseFloat(document.getElementById('salary').value.replace(/[^0-9.]/g, ''));
         const selectedLocations = [
             document.getElementById('location1').value,
             document.getElementById('location2').value,
@@ -317,7 +320,7 @@
                 socialSecurity: socialSecurity,
                 medicare: medicare,
                 totalTax: totalTax,
-                takehomePay: takehomePay,
+takehomePay: takehomePay,
                 annualExpenses: annualExpenses,
                 remainingMoney: takehomePay - annualExpenses,
                 costIndex: location.costIndex
@@ -337,26 +340,26 @@
             resultDiv.className = 'section';
             resultDiv.innerHTML = `
                 <h3>${result.location}</h3>
-                <p>Take-Home Pay: $${result.takehomePay.toFixed(2)}</p>
-                <p>Annual Expenses: $${result.annualExpenses.toFixed(2)}</p>
-                <p>Remaining Money: <span style="color: ${result.remainingMoney >= 0 ? 'green' : 'red'}">$${result.remainingMoney.toFixed(2)}</span></p>
+                <p>Take-Home Pay: ${formatMoney(result.takehomePay)}</p>
+                <p>Annual Expenses: ${formatMoney(result.annualExpenses)}</p>
+                <p>Remaining Money: <span style="color: ${result.remainingMoney >= 0 ? 'green' : 'red'}">${formatMoney(result.remainingMoney)}</span></p>
                 <button class="toggle-breakdown" onclick="toggleBreakdown('breakdown-${index}')">
                     <span class="material-icons">expand_more</span> Show Breakdown
                 </button>
                 <div id="breakdown-${index}" class="breakdown">
                     <h4>Detailed Breakdown</h4>
                     <table>
-                        <tr><td>Gross Pay:</td><td>$${result.grossPay.toFixed(2)}</td></tr>
-                        <tr><td>Federal Tax:</td><td>$${result.federalTax.toFixed(2)}</td></tr>
-                        <tr><td>State Tax:</td><td>$${result.stateTax.toFixed(2)}</td></tr>
-                        <tr><td>Local Tax:</td><td>$${result.localTax.toFixed(2)}</td></tr>
-                        <tr><td>Social Security:</td><td>$${result.socialSecurity.toFixed(2)}</td></tr>
-                        <tr><td>Medicare:</td><td>$${result.medicare.toFixed(2)}</td></tr>
-                        <tr><td>Total Tax:</td><td>$${result.totalTax.toFixed(2)}</td></tr>
-                        <tr><td>Take-Home Pay:</td><td>$${result.takehomePay.toFixed(2)}</td></tr>
+                        <tr><td>Gross Pay:</td><td>${formatMoney(result.grossPay)}</td></tr>
+                        <tr><td>Federal Tax:</td><td>${formatMoney(result.federalTax)}</td></tr>
+                        <tr><td>State Tax:</td><td>${formatMoney(result.stateTax)}</td></tr>
+                        <tr><td>Local Tax:</td><td>${formatMoney(result.localTax)}</td></tr>
+                        <tr><td>Social Security:</td><td>${formatMoney(result.socialSecurity)}</td></tr>
+                        <tr><td>Medicare:</td><td>${formatMoney(result.medicare)}</td></tr>
+                        <tr><td>Total Tax:</td><td>${formatMoney(result.totalTax)}</td></tr>
+                        <tr><td>Take-Home Pay:</td><td>${formatMoney(result.takehomePay)}</td></tr>
                         <tr><td>Cost of Living Index:</td><td>${result.costIndex.toFixed(2)}</td></tr>
-                        <tr><td>Estimated Annual Expenses:</td><td>$${result.annualExpenses.toFixed(2)}</td></tr>
-                        <tr><td>Remaining Money:</td><td>$${result.remainingMoney.toFixed(2)}</td></tr>
+                        <tr><td>Estimated Annual Expenses:</td><td>${formatMoney(result.annualExpenses)}</td></tr>
+                        <tr><td>Remaining Money:</td><td>${formatMoney(result.remainingMoney)}</td></tr>
                     </table>
                 </div>
             `;
@@ -364,14 +367,15 @@
         });
     }
 
-    // Initialize the calculator
-    populateLocations();
-    </script>
-</body>
-</html>
-<script>
-    function formatMoney(amount) {
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    function validateForm() {
+        const salary = document.getElementById('salary').value.trim();
+        const location1 = document.getElementById('location1').value;
+        
+        if (!salary || !location1) {
+            alert('Please enter your salary and select at least one location.');
+            return false;
+        }
+        return true;
     }
 
     // Event listeners
@@ -412,102 +416,6 @@
             });
         });
     });
-
-    // Function to validate form before calculation
-    function validateForm() {
-        const salary = document.getElementById('salary').value;
-        const location1 = document.getElementById('location1').value;
-        
-        if (!salary || !location1) {
-            alert('Please enter your salary and select at least one location.');
-            return false;
-        }
-        return true;
-    }
-
-    // Update the calculateResults function to include validation
-    function calculateResults() {
-        if (!validateForm()) {
-            return;
-        }
-        
-        const salary = parseFloat(document.getElementById('salary').value.replace(/,/g, ''));
-        const selectedLocations = [
-            document.getElementById('location1').value,
-            document.getElementById('location2').value,
-            document.getElementById('location3').value
-        ].filter(Boolean);
-
-        const results = selectedLocations.map(locationName => {
-            const location = locations.find(loc => loc.name === locationName);
-            const federalTax = calculateFederalTax(salary);
-            const stateTax = salary * location.stateTax;
-            const localTax = salary * location.localTax;
-            const socialSecurity = Math.min(salary * 0.062, 9114); // 2021 cap
-            const medicare = salary * 0.0145;
-            const totalTax = federalTax + stateTax + localTax + socialSecurity + medicare;
-            const takehomePay = salary - totalTax;
-
-            // Estimate annual expenses based on cost of living index
-            const baseExpenses = 40000; // Baseline annual expenses for a cost index of 1.0
-            const annualExpenses = baseExpenses * location.costIndex;
-
-            return {
-                location: locationName,
-                grossPay: salary,
-                federalTax: federalTax,
-                stateTax: stateTax,
-                localTax: localTax,
-                socialSecurity: socialSecurity,
-                medicare: medicare,
-                totalTax: totalTax,
-                takehomePay: takehomePay,
-                annualExpenses: annualExpenses,
-                remainingMoney: takehomePay - annualExpenses,
-                costIndex: location.costIndex
-            };
-        });
-
-        displayResults(results);
-        showPage('resultsPage');
-    }
-
-    // Update the displayResults function to use formatMoney
-    function displayResults(results) {
-        const container = document.getElementById('resultsContainer');
-        container.innerHTML = '';
-
-        results.forEach((result, index) => {
-            const resultDiv = document.createElement('div');
-            resultDiv.className = 'section';
-            resultDiv.innerHTML = `
-                <h3>${result.location}</h3>
-                <p>Take-Home Pay: ${formatMoney(result.takehomePay)}</p>
-                <p>Annual Expenses: ${formatMoney(result.annualExpenses)}</p>
-                <p>Remaining Money: <span style="color: ${result.remainingMoney >= 0 ? 'green' : 'red'}">${formatMoney(result.remainingMoney)}</span></p>
-                <button class="toggle-breakdown" onclick="toggleBreakdown('breakdown-${index}')">
-                    <span class="material-icons">expand_more</span> Show Breakdown
-                </button>
-                <div id="breakdown-${index}" class="breakdown">
-                    <h4>Detailed Breakdown</h4>
-                    <table>
-                        <tr><td>Gross Pay:</td><td>${formatMoney(result.grossPay)}</td></tr>
-                        <tr><td>Federal Tax:</td><td>${formatMoney(result.federalTax)}</td></tr>
-                        <tr><td>State Tax:</td><td>${formatMoney(result.stateTax)}</td></tr>
-                        <tr><td>Local Tax:</td><td>${formatMoney(result.localTax)}</td></tr>
-                        <tr><td>Social Security:</td><td>${formatMoney(result.socialSecurity)}</td></tr>
-                        <tr><td>Medicare:</td><td>${formatMoney(result.medicare)}</td></tr>
-                        <tr><td>Total Tax:</td><td>${formatMoney(result.totalTax)}</td></tr>
-                        <tr><td>Take-Home Pay:</td><td>${formatMoney(result.takehomePay)}</td></tr>
-                        <tr><td>Cost of Living Index:</td><td>${result.costIndex.toFixed(2)}</td></tr>
-                        <tr><td>Estimated Annual Expenses:</td><td>${formatMoney(result.annualExpenses)}</td></tr>
-                        <tr><td>Remaining Money:</td><td>${formatMoney(result.remainingMoney)}</td></tr>
-                    </table>
-                </div>
-            `;
-            container.appendChild(resultDiv);
-        });
-    }
     </script>
 </body>
 </html>
