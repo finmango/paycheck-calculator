@@ -137,22 +137,40 @@
         }
         .bar-graph {
             width: 100%;
-            height: 300px;
-            margin-bottom: 20px;
+            height: 400px;
+            margin-bottom: 40px;
             position: relative;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
         }
         .bar {
             position: absolute;
-            width: 40px;
+            width: 60px;
             transition: height 0.5s ease-in-out;
+            border-radius: 4px 4px 0 0;
         }
         .bar-label {
             position: absolute;
-            bottom: -20px;
+            bottom: -30px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
             font-size: 12px;
+            width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .bar-value {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
         }
         .x-axis {
             position: absolute;
@@ -161,6 +179,19 @@
             right: 0;
             height: 2px;
             background-color: #333;
+        }
+        .y-axis {
+            position: absolute;
+            bottom: 0;
+            left: 40px;
+            top: 0;
+            width: 2px;
+            background-color: #333;
+        }
+        .axis-label {
+            position: absolute;
+            font-size: 12px;
+            color: #666;
         }
         @media (max-width: 600px) {
             button {
@@ -290,7 +321,8 @@
         { name: "Tampa, FL", stateTax: 0, localTax: 0, costIndex: 1.0 },
         { name: "Washington, DC", stateTax: 0.0895, localTax: 0, costIndex: 1.5 }
     ];
-function populateLocations() {
+
+    function populateLocations() {
         const selects = [document.getElementById('location1'), document.getElementById('location2'), document.getElementById('location3')];
         selects.forEach(select => {
             select.innerHTML = '<option value="">Select a city</option>';
@@ -376,7 +408,7 @@ function populateLocations() {
         const container = document.getElementById('resultsContainer');
         container.innerHTML = '';
 
-        // Add simplified bar graph
+        // Add improved bar graph
         const graphDiv = document.createElement('div');
         graphDiv.className = 'section';
         graphDiv.innerHTML = '<h3>Comparison of Remaining Money</h3>';
@@ -384,30 +416,64 @@ function populateLocations() {
         barGraph.className = 'bar-graph';
 
         const maxAbsRemaining = Math.max(...results.map(r => Math.abs(r.remainingMoney)));
-        const barWidth = 100 / results.length;
+        const barWidth = 80; // Fixed width for each bar
+        const graphWidth = results.length * (barWidth + 20); // 20px gap between bars
+
+        barGraph.style.width = `${Math.max(graphWidth, 100)}%`;
+
+        // Add y-axis
+        const yAxis = document.createElement('div');
+        yAxis.className = 'y-axis';
+        barGraph.appendChild(yAxis);
+
+        // Add x-axis
+        const xAxis = document.createElement('div');
+        xAxis.className = 'x-axis';
+        barGraph.appendChild(xAxis);
+
+        // Add axis labels
+        const yAxisLabel = document.createElement('div');
+        yAxisLabel.className = 'axis-label';
+        yAxisLabel.style.left = '10px';
+        yAxisLabel.style.top = '50%';
+        yAxisLabel.style.transform = 'rotate(-90deg) translateX(-50%)';
+        yAxisLabel.textContent = 'Remaining Money ($)';
+        barGraph.appendChild(yAxisLabel);
+
+        const xAxisLabel = document.createElement('div');
+        xAxisLabel.className = 'axis-label';
+        xAxisLabel.style.bottom = '-40px';
+        xAxisLabel.style.left = '50%';
+        xAxisLabel.style.transform = 'translateX(-50%)';
+        xAxisLabel.textContent = 'Cities';
+        barGraph.appendChild(xAxisLabel);
 
         results.forEach((result, index) => {
             const bar = document.createElement('div');
             bar.className = 'bar';
-            const height = (Math.abs(result.remainingMoney) / maxAbsRemaining) * 50;
+            const height = (Math.abs(result.remainingMoney) / maxAbsRemaining) * 45;
             bar.style.height = `${height}%`;
-            bar.style.left = `${index * barWidth}%`;
-            bar.style.width = `${barWidth}%`;
+            bar.style.left = `${index * (barWidth + 20) + 60}px`; // 60px offset for y-axis
+            bar.style.width = `${barWidth}px`;
             bar.style.backgroundColor = result.remainingMoney >= 0 ? '#4CAF50' : '#F44336';
             bar.style.bottom = result.remainingMoney >= 0 ? '50%' : `calc(50% - ${height}%)`;
 
             const label = document.createElement('div');
             label.className = 'bar-label';
             label.textContent = result.location;
-            label.style.left = `${index * barWidth + barWidth / 2}%`;
+            label.style.left = `${index * (barWidth + 20) + 60 + barWidth / 2}px`;
+            label.style.bottom = '-30px';
+
+            const value = document.createElement('div');
+            value.className = 'bar-value';
+            value.textContent = formatMoney(result.remainingMoney);
+            value.style.left = `${index * (barWidth + 20) + 60 + barWidth / 2}px`;
+            value.style.bottom = `${result.remainingMoney >= 0 ? height + 50 : 50 - height}%`;
 
             barGraph.appendChild(bar);
             barGraph.appendChild(label);
+            barGraph.appendChild(value);
         });
-
-        const xAxis = document.createElement('div');
-        xAxis.className = 'x-axis';
-        barGraph.appendChild(xAxis);
 
         graphDiv.appendChild(barGraph);
         container.appendChild(graphDiv);
