@@ -136,7 +136,7 @@
             text-decoration: underline; 
         }
         .bar-graph {
-            width: 50%;
+            width: 100%;
             height: 400px;
             margin-bottom: 40px;
             position: relative;
@@ -313,7 +313,7 @@
         { name: "Raleigh, NC", stateTax: 0.0525, localTax: 0, costIndex: 1.0 },
         { name: "Sacramento, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.2 },
         { name: "Salt Lake City, UT", stateTax: 0.0495, localTax: 0, costIndex: 1.1 },
-        { name: "San Antonio, TX", stateTax: 0, localTax: 0, costIndex: 0.9 },
+  { name: "San Antonio, TX", stateTax: 0, localTax: 0, costIndex: 0.9 },
         { name: "San Diego, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.4 },
         { name: "San Francisco, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.9 },
         { name: "Seattle, WA", stateTax: 0, localTax: 0, costIndex: 1.5 },
@@ -417,9 +417,10 @@
 
         const maxAbsRemaining = Math.max(...results.map(r => Math.abs(r.remainingMoney)));
         const barWidth = 80; // Fixed width for each bar
-        const graphWidth = results.length * (barWidth + 20); // 20px gap between bars
+        const graphWidth = Math.min(results.length * (barWidth + 20), 400); // Limit max width to 400px
 
-        barGraph.style.width = `${Math.max(graphWidth, 100)}%`;
+        barGraph.style.width = `${graphWidth}px`;
+        barGraph.style.margin = '0 auto'; // Center the graph
 
         // Add y-axis
         const yAxis = document.createElement('div');
@@ -453,21 +454,21 @@
             bar.className = 'bar';
             const height = (Math.abs(result.remainingMoney) / maxAbsRemaining) * 45;
             bar.style.height = `${height}%`;
-            bar.style.left = `${index * (barWidth + 20) + 60}px`; // 60px offset for y-axis
-            bar.style.width = `${barWidth}px`;
+            bar.style.left = `${(index * (barWidth + 20) / results.length) * (graphWidth - 60) / (barWidth + 20) + 60}px`;
+            bar.style.width = `${barWidth * (graphWidth - 60) / (results.length * (barWidth + 20))}px`;
             bar.style.backgroundColor = result.remainingMoney >= 0 ? '#4CAF50' : '#F44336';
             bar.style.bottom = result.remainingMoney >= 0 ? '50%' : `calc(50% - ${height}%)`;
 
             const label = document.createElement('div');
             label.className = 'bar-label';
             label.textContent = result.location;
-            label.style.left = `${index * (barWidth + 20) + 60 + barWidth / 2}px`;
+            label.style.left = `${(index * (barWidth + 20) / results.length) * (graphWidth - 60) / (barWidth + 20) + 60 + (barWidth * (graphWidth - 60) / (results.length * (barWidth + 20))) / 2}px`;
             label.style.bottom = '-30px';
 
             const value = document.createElement('div');
             value.className = 'bar-value';
             value.textContent = formatMoney(result.remainingMoney);
-            value.style.left = `${index * (barWidth + 20) + 60 + barWidth / 2}px`;
+            value.style.left = `${(index * (barWidth + 20) / results.length) * (graphWidth - 60) / (barWidth + 20) + 60 + (barWidth * (graphWidth - 60) / (results.length * (barWidth + 20))) / 2}px`;
             value.style.bottom = `${result.remainingMoney >= 0 ? height + 50 : 50 - height}%`;
 
             barGraph.appendChild(bar);
