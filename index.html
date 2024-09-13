@@ -137,8 +137,9 @@
         }
         .bar-graph {
             width: 100%;
+            max-width: 800px;
             height: 400px;
-            margin-bottom: 40px;
+            margin: 0 auto 40px;
             position: relative;
             background-color: #f5f5f5;
             border: 1px solid #ddd;
@@ -147,14 +148,12 @@
         }
         .bar {
             position: absolute;
-            width: 60px;
             transition: height 0.5s ease-in-out;
             border-radius: 4px 4px 0 0;
         }
         .bar-label {
             position: absolute;
             bottom: -30px;
-            left: 50%;
             transform: translateX(-50%);
             text-align: center;
             font-size: 12px;
@@ -166,7 +165,6 @@
         .bar-value {
             position: absolute;
             top: -20px;
-            left: 50%;
             transform: translateX(-50%);
             text-align: center;
             font-size: 12px;
@@ -313,7 +311,7 @@
         { name: "Raleigh, NC", stateTax: 0.0525, localTax: 0, costIndex: 1.0 },
         { name: "Sacramento, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.2 },
         { name: "Salt Lake City, UT", stateTax: 0.0495, localTax: 0, costIndex: 1.1 },
-  { name: "San Antonio, TX", stateTax: 0, localTax: 0, costIndex: 0.9 },
+{ name: "San Antonio, TX", stateTax: 0, localTax: 0, costIndex: 0.9 },
         { name: "San Diego, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.4 },
         { name: "San Francisco, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.9 },
         { name: "Seattle, WA", stateTax: 0, localTax: 0, costIndex: 1.5 },
@@ -416,11 +414,7 @@
         barGraph.className = 'bar-graph';
 
         const maxAbsRemaining = Math.max(...results.map(r => Math.abs(r.remainingMoney)));
-        const barWidth = 80; // Fixed width for each bar
-        const graphWidth = Math.min(results.length * (barWidth + 20), 400); // Limit max width to 400px
-
-        barGraph.style.width = `${graphWidth}px`;
-        barGraph.style.margin = '0 auto'; // Center the graph
+        barGraph.style.width = '100%';
 
         // Add y-axis
         const yAxis = document.createElement('div');
@@ -454,21 +448,21 @@
             bar.className = 'bar';
             const height = (Math.abs(result.remainingMoney) / maxAbsRemaining) * 45;
             bar.style.height = `${height}%`;
-            bar.style.left = `${(index * (barWidth + 20) / results.length) * (graphWidth - 60) / (barWidth + 20) + 60}px`;
-            bar.style.width = `${barWidth * (graphWidth - 60) / (results.length * (barWidth + 20))}px`;
+            bar.style.left = `${(index / results.length) * 100}%`;
+            bar.style.width = `${100 / results.length - 5}%`;
             bar.style.backgroundColor = result.remainingMoney >= 0 ? '#4CAF50' : '#F44336';
             bar.style.bottom = result.remainingMoney >= 0 ? '50%' : `calc(50% - ${height}%)`;
 
             const label = document.createElement('div');
             label.className = 'bar-label';
             label.textContent = result.location;
-            label.style.left = `${(index * (barWidth + 20) / results.length) * (graphWidth - 60) / (barWidth + 20) + 60 + (barWidth * (graphWidth - 60) / (results.length * (barWidth + 20))) / 2}px`;
+            label.style.left = `${(index / results.length) * 100 + (100 / results.length / 2)}%`;
             label.style.bottom = '-30px';
 
             const value = document.createElement('div');
             value.className = 'bar-value';
             value.textContent = formatMoney(result.remainingMoney);
-            value.style.left = `${(index * (barWidth + 20) / results.length) * (graphWidth - 60) / (barWidth + 20) + 60 + (barWidth * (graphWidth - 60) / (results.length * (barWidth + 20))) / 2}px`;
+            value.style.left = `${(index / results.length) * 100 + (100 / results.length / 2)}%`;
             value.style.bottom = `${result.remainingMoney >= 0 ? height + 50 : 50 - height}%`;
 
             barGraph.appendChild(bar);
