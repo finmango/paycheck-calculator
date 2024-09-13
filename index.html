@@ -136,39 +136,29 @@
             text-decoration: underline; 
         }
         .bar-graph {
-            width: 100%;
+            width: 50%;
             height: 400px;
             margin-bottom: 40px;
             position: relative;
             background-color: #f5f5f5;
             border: 1px solid #ddd;
             border-radius: 4px;
-            padding: 20px 10px 40px 40px;
-        }
-        .bar-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            height: 100%;
-            width: 100%;
+            padding: 20px;
         }
         .bar {
-            flex: 1;
-            min-width: 30px;
-            max-width: 60px;
-            margin: 0 5px;
+            position: absolute;
+            width: 60px;
             transition: height 0.5s ease-in-out;
-            position: relative;
+            border-radius: 4px 4px 0 0;
         }
         .bar-label {
             position: absolute;
             bottom: -30px;
             left: 50%;
-            transform: translateX(-50%) rotate(-45deg);
-            transform-origin: top left;
-            text-align: left;
-            font-size: 10px;
-            width: 70px;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 12px;
+            width: 100px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -179,12 +169,12 @@
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: bold;
         }
         .x-axis {
             position: absolute;
-            bottom: 0;
+            bottom: 50%;
             left: 0;
             right: 0;
             height: 2px;
@@ -193,7 +183,7 @@
         .y-axis {
             position: absolute;
             bottom: 0;
-            left: 0;
+            left: 40px;
             top: 0;
             width: 2px;
             background-color: #333;
@@ -207,20 +197,6 @@
             button {
                 width: 100%;
                 margin-right: 0;
-            }
-            .bar-graph {
-                padding-left: 30px;
-            }
-            .bar {
-                min-width: 20px;
-                margin: 0 2px;
-            }
-            .bar-label {
-                font-size: 8px;
-                width: 50px;
-            }
-            .bar-value {
-                font-size: 8px;
             }
         }
     </style>
@@ -332,7 +308,7 @@
         { name: "Orlando, FL", stateTax: 0, localTax: 0, costIndex: 1.0 },
         { name: "Philadelphia, PA", stateTax: 0.0307, localTax: 0.038907, costIndex: 1.15 },
         { name: "Phoenix, AZ", stateTax: 0.0459, localTax: 0, costIndex: 1.05 },
-   { name: "Pittsburgh, PA", stateTax: 0.0307, localTax: 0.03, costIndex: 0.95 },
+        { name: "Pittsburgh, PA", stateTax: 0.0307, localTax: 0.03, costIndex: 0.95 },
         { name: "Portland, OR", stateTax: 0.099, localTax: 0, costIndex: 1.2 },
         { name: "Raleigh, NC", stateTax: 0.0525, localTax: 0, costIndex: 1.0 },
         { name: "Sacramento, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.2 },
@@ -439,32 +415,11 @@
         const barGraph = document.createElement('div');
         barGraph.className = 'bar-graph';
 
-        const barContainer = document.createElement('div');
-        barContainer.className = 'bar-container';
-
         const maxAbsRemaining = Math.max(...results.map(r => Math.abs(r.remainingMoney)));
+        const barWidth = 80; // Fixed width for each bar
+        const graphWidth = results.length * (barWidth + 20); // 20px gap between bars
 
-        results.forEach((result, index) => {
-            const barWrapper = document.createElement('div');
-            barWrapper.className = 'bar';
-            const height = (Math.abs(result.remainingMoney) / maxAbsRemaining) * 100;
-            barWrapper.style.height = `${height}%`;
-            barWrapper.style.backgroundColor = result.remainingMoney >= 0 ? '#4CAF50' : '#F44336';
-
-            const label = document.createElement('div');
-            label.className = 'bar-label';
-            label.textContent = result.location.split(',')[0]; // Only city name, not state
-
-            const value = document.createElement('div');
-            value.className = 'bar-value';
-            value.textContent = formatMoney(result.remainingMoney);
-
-            barWrapper.appendChild(label);
-            barWrapper.appendChild(value);
-            barContainer.appendChild(barWrapper);
-        });
-
-        barGraph.appendChild(barContainer);
+        barGraph.style.width = `${Math.max(graphWidth, 100)}%`;
 
         // Add y-axis
         const yAxis = document.createElement('div');
@@ -479,11 +434,46 @@
         // Add axis labels
         const yAxisLabel = document.createElement('div');
         yAxisLabel.className = 'axis-label';
-        yAxisLabel.style.left = '-30px';
+        yAxisLabel.style.left = '10px';
         yAxisLabel.style.top = '50%';
         yAxisLabel.style.transform = 'rotate(-90deg) translateX(-50%)';
-        yAxisLabel.textContent = 'Remaining $';
+        yAxisLabel.textContent = 'Remaining Money ($)';
         barGraph.appendChild(yAxisLabel);
+
+        const xAxisLabel = document.createElement('div');
+        xAxisLabel.className = 'axis-label';
+        xAxisLabel.style.bottom = '-40px';
+        xAxisLabel.style.left = '50%';
+        xAxisLabel.style.transform = 'translateX(-50%)';
+        xAxisLabel.textContent = 'Cities';
+        barGraph.appendChild(xAxisLabel);
+
+        results.forEach((result, index) => {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            const height = (Math.abs(result.remainingMoney) / maxAbsRemaining) * 45;
+            bar.style.height = `${height}%`;
+            bar.style.left = `${index * (barWidth + 20) + 60}px`; // 60px offset for y-axis
+            bar.style.width = `${barWidth}px`;
+            bar.style.backgroundColor = result.remainingMoney >= 0 ? '#4CAF50' : '#F44336';
+            bar.style.bottom = result.remainingMoney >= 0 ? '50%' : `calc(50% - ${height}%)`;
+
+            const label = document.createElement('div');
+            label.className = 'bar-label';
+            label.textContent = result.location;
+            label.style.left = `${index * (barWidth + 20) + 60 + barWidth / 2}px`;
+            label.style.bottom = '-30px';
+
+            const value = document.createElement('div');
+            value.className = 'bar-value';
+            value.textContent = formatMoney(result.remainingMoney);
+            value.style.left = `${index * (barWidth + 20) + 60 + barWidth / 2}px`;
+            value.style.bottom = `${result.remainingMoney >= 0 ? height + 50 : 50 - height}%`;
+
+            barGraph.appendChild(bar);
+            barGraph.appendChild(label);
+            barGraph.appendChild(value);
+        });
 
         graphDiv.appendChild(barGraph);
         container.appendChild(graphDiv);
