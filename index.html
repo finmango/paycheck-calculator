@@ -4,153 +4,214 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paycheck Calculator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Poppins:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #6200ee;
+            --primary-variant: #3700b3;
+            --secondary-color: #03dac6;
+            --background: #f5f5f5;
+            --surface: #ffffff;
+            --error: #b00020;
+            --on-primary: #ffffff;
+            --on-secondary: #000000;
+            --on-background: #000000;
+            --on-surface: #000000;
+            --on-error: #ffffff;
+        }
+
         body { 
             font-family: 'Roboto', sans-serif; 
             max-width: 800px; 
             margin: 0 auto; 
             padding: 20px; 
             line-height: 1.6; 
-            color: #333;
-            background-color: #f5f5f5;
+            color: var(--on-background);
+            background-color: var(--background);
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
-        h1, h2, h3 { color: #1976D2; }
+
+        h1, h2, h3 { 
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+        }
+
         .page { display: none; }
         .page.active { display: block; }
+
         .form-group { margin-bottom: 20px; }
+
         label { 
             display: block; 
             margin-bottom: 5px; 
             font-weight: 500; 
-            color: #555;
+            color: var(--on-surface);
         }
+
         input[type="text"], select { 
             width: 100%; 
-            padding: 10px; 
-            border: 1px solid #ddd; 
+            padding: 12px; 
+            border: 1px solid rgba(0,0,0,0.1); 
             border-radius: 4px; 
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            background-color: var(--surface);
+            color: var(--on-surface);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         input[type="text"]:focus, select:focus {
-            border-color: #1976D2;
+            border-color: var(--primary-color);
             outline: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+
         button { 
-            padding: 10px 20px; 
-            background-color: #1976D2; 
-            color: white; 
+            padding: 12px 24px; 
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-variant));
+            color: var(--on-primary); 
             border: none; 
             border-radius: 4px; 
             cursor: pointer; 
             margin-right: 10px; 
             margin-bottom: 10px;
             font-size: 16px;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        button:hover { background-color: #1565C0; }
+
+        button:hover { 
+            background: linear-gradient(45deg, var(--primary-variant), var(--primary-color));
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
         .explanation { 
-            background-color: #E3F2FD; 
-            border-left: 4px solid #1976D2; 
+            background-color: var(--surface); 
+            border-left: 4px solid var(--secondary-color); 
             padding: 15px; 
             margin-bottom: 20px; 
             border-radius: 0 4px 4px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         .section { 
             margin-bottom: 30px; 
-            background-color: white;
-            border-radius: 4px;
+            background-color: var(--surface);
+            border-radius: 8px;
             padding: 20px; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
         }
+
+        .section:hover {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
         .header { 
             text-align: left; 
             margin-bottom: 20px; 
         }
+
         .logo { 
             max-width: 150px; 
             height: auto; 
             margin-bottom: 20px; 
             cursor: pointer; 
         }
+
         .title-box {
-            background-color: #1976D2;
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--on-primary);
             padding: 15px 20px;
-            border-radius: 4px;
+            border-radius: 8px;
             display: block;
             margin-top: 10px;
             text-align: left;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
         .title-box h1 {
-            color: white;
+            color: var(--on-primary);
             margin: 0;
         }
+
         .info-link { 
             font-size: 0.9em; 
             margin-bottom: 5px; 
-            color: #1976D2;
+            color: var(--primary-color);
         }
+
         .material-icons {
             vertical-align: middle;
             margin-right: 5px;
         }
+
         .button-container {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
         }
+
         table { 
             width: 100%; 
             border-collapse: collapse; 
             margin-top: 20px; 
-            background-color: white;
+            background-color: var(--surface);
             box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
         }
+
         th, td { 
-            border: 1px solid #ddd; 
+            border: 1px solid rgba(0,0,0,0.1); 
             padding: 12px; 
             text-align: left; 
         }
+
         th { 
-            background-color: #1976D2; 
-            color: white;
+            background-color: var(--primary-color); 
+            color: var(--on-primary);
         }
+
         .breakdown { 
             display: none; 
             margin-top: 10px; 
         }
+
         .breakdown.active { 
             display: block; 
         }
+
         .toggle-breakdown { 
             background: none; 
             border: none; 
-            color: #1976D2; 
+            color: var(--primary-color); 
             cursor: pointer; 
             padding: 0; 
         }
+
         .toggle-breakdown:hover { 
             text-decoration: underline; 
         }
+
         .bar-graph {
             width: 100%;
             max-width: 800px;
             height: 400px;
             margin: 0 auto 40px;
             position: relative;
-            background-color: #f5f5f5;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            background-color: var(--surface);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
             padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
         .bar {
             position: absolute;
             transition: height 0.5s ease-in-out;
             border-radius: 4px 4px 0 0;
         }
+
         .bar-label {
             position: absolute;
             bottom: -30px;
@@ -162,6 +223,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .bar-value {
             position: absolute;
             top: -20px;
@@ -170,27 +232,31 @@
             font-size: 12px;
             font-weight: bold;
         }
+
         .x-axis {
             position: absolute;
             bottom: 50%;
             left: 0;
             right: 0;
             height: 2px;
-            background-color: #333;
+            background-color: rgba(0,0,0,0.2);
         }
+
         .y-axis {
             position: absolute;
             bottom: 0;
             left: 40px;
             top: 0;
             width: 2px;
-            background-color: #333;
+            background-color: rgba(0,0,0,0.2);
         }
+
         .axis-label {
             position: absolute;
             font-size: 12px;
-            color: #666;
+            color: rgba(0,0,0,0.6);
         }
+
         @media (max-width: 600px) {
             button {
                 width: 100%;
@@ -289,7 +355,7 @@
         { name: "Cincinnati, OH", stateTax: 0.0399, localTax: 0.021, costIndex: 0.9 },
         { name: "Cleveland, OH", stateTax: 0.0399, localTax: 0.02, costIndex: 0.9 },
         { name: "Columbus, OH", stateTax: 0.0399, localTax: 0.025, costIndex: 0.95 },
-        { name: "Dallas, TX", stateTax: 0, localTax: 0, costIndex: 1.0 },
+        { name: "Dallas, TX", stateTax: 0, localTax: 0, costIndex:
         { name: "Denver, CO", stateTax: 0.0455, localTax: 0, costIndex: 1.15 },
         { name: "Detroit, MI", stateTax: 0.0425, localTax: 0.024, costIndex: 0.9 },
         { name: "Houston, TX", stateTax: 0, localTax: 0, costIndex: 0.95 },
@@ -311,7 +377,7 @@
         { name: "Raleigh, NC", stateTax: 0.0525, localTax: 0, costIndex: 1.0 },
         { name: "Sacramento, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.2 },
         { name: "Salt Lake City, UT", stateTax: 0.0495, localTax: 0, costIndex: 1.1 },
-{ name: "San Antonio, TX", stateTax: 0, localTax: 0, costIndex: 0.9 },
+        { name: "San Antonio, TX", stateTax: 0, localTax: 0, costIndex: 0.9 },
         { name: "San Diego, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.4 },
         { name: "San Francisco, CA", stateTax: 0.0930, localTax: 0, costIndex: 1.9 },
         { name: "Seattle, WA", stateTax: 0, localTax: 0, costIndex: 1.5 },
@@ -450,7 +516,7 @@
             bar.style.height = `${height}%`;
             bar.style.left = `${(index / results.length) * 100}%`;
             bar.style.width = `${100 / results.length - 5}%`;
-            bar.style.backgroundColor = result.remainingMoney >= 0 ? '#4CAF50' : '#F44336';
+            bar.style.backgroundColor = result.remainingMoney >= 0 ? '#26A69A' : '#EF5350';
             bar.style.bottom = result.remainingMoney >= 0 ? '50%' : `calc(50% - ${height}%)`;
 
             const label = document.createElement('div');
@@ -481,7 +547,7 @@
                 <h3>${result.location}</h3>
                 <p>Take-Home Pay: ${formatMoney(result.takehomePay)}</p>
                 <p>Annual Expenses: ${formatMoney(result.annualExpenses)}</p>
-                <p>Remaining Money: <span style="color: ${result.remainingMoney >= 0 ? 'green' : 'red'}">${formatMoney(result.remainingMoney)}</span></p>
+                <p>Remaining Money: <span style="color: ${result.remainingMoney >= 0 ? '#26A69A' : '#EF5350'}">${formatMoney(result.remainingMoney)}</span></p>
                 <button class="toggle-breakdown" onclick="toggleBreakdown('breakdown-${index}')">
                     <span class="material-icons">expand_more</span> Show Breakdown
                 </button>
