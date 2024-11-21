@@ -6,9 +6,341 @@
     <title>FinMango Paycheck Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-    <!-- Previous CSS styles remain the same until the closing </style> tag -->
     <style>
-        /* Previous CSS remains exactly the same */
+        :root {
+            --finmango-orange: #FF8A00;
+            --finmango-black: #000000;
+            --light-bg: #FFFFFF;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --text-primary: var(--gray-800);
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body { 
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background-color: var(--gray-50);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            background-color: var(--light-bg);
+            padding: 16px 0;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            gap: 32px;
+            height: 72px;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+            cursor: pointer;
+        }
+
+        .header-title {
+            flex: 1;
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--finmango-black);
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--light-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--gray-200);
+        }
+
+        h1, h2, h3 {
+            color: var(--finmango-black);
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        h1 { font-size: 28px; }
+        h2 { font-size: 24px; }
+        h3 { font-size: 20px; }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            color: var(--gray-700);
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .explanation {
+            background-color: var(--gray-50);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 24px;
+            border-left: 4px solid var(--finmango-orange);
+        }
+
+        .explanation p {
+            margin-bottom: 16px;
+            color: var(--gray-700);
+        }
+
+        .explanation ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .explanation li {
+            margin-bottom: 8px;
+            padding-left: 24px;
+            position: relative;
+            color: var(--gray-700);
+        }
+
+        .explanation li:before {
+            content: "•";
+            color: var(--finmango-orange);
+            font-weight: bold;
+            position: absolute;
+            left: 8px;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            color: var(--text-primary);
+            background: var(--light-bg);
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: var(--finmango-orange);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        button.primary {
+            background-color: var(--finmango-orange);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        button.primary:hover {
+            filter: brightness(110%);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        button.secondary {
+            background-color: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        button.secondary:hover {
+            background-color: var(--gray-300);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .breakdown-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 16px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .breakdown-table th,
+        .breakdown-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .breakdown-table th {
+            background-color: var(--gray-50);
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .bar-graph-container {
+            width: 100%;
+            padding: 32px;
+            background: var(--light-bg);
+            border-radius: var(--radius-lg);
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .bar-graph {
+            height: 400px;
+            position: relative;
+            margin-top: 24px;
+        }
+
+        .bar-graph-title {
+            margin: 0;
+            padding: 0 0 16px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .bar {
+            position: absolute;
+            bottom: 60px;
+            transition: height 0.5s ease;
+            border-radius: var(--radius-sm);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: 24px;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 14px;
+            color: var(--gray-600);
+            font-weight: 500;
+            width: 120px;
+        }
+
+        .bar-value {
+            position: absolute;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        a {
+            color: var(--finmango-orange);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--finmango-black);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header-content {
+                padding: 0 16px;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .bar-label {
+                width: 80px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -22,17 +354,14 @@
     <div class="container">
         <div id="introPage" class="page active">
             <div class="card">
-                <h2>Calculate Your Take-Home Pay</h2>
+                <h2>What's Your Real Take-Home Pay?</h2>
                 <div class="explanation">
-                    <div class="explanation-header">
-                        <span class="material-symbols-rounded">info</span>
-                        <p>Built by <a href="https://www.finmango.org/" target="_blank">FinMango</a> in collaboration with <a href="https://www.linkedin.com/in/jack-enkema/" target="_blank">Jack Enkema</a>, this calculator helps you understand:</p>
-                    </div>
+                    <p>Built by <a href="https://www.finmango.org/" target="_blank">FinMango</a> in collaboration with <a href="https://www.linkedin.com/in/jack-enkema/" target="_blank">Jack Enkema</a>, this calculator helps you understand:</p>
                     <ul>
-                        <li>Your after-tax income and take-home pay</li>
-                        <li>Cost of living comparisons across major US cities</li>
-                        <li>Detailed monthly expense breakdowns</li>
-                        <li>Disposable income analysis</li>
+                        <li>Your after-tax income in different cities</li>
+                        <li>Real cost of living comparisons</li>
+                        <li>Monthly expense breakdowns</li>
+                        <li>How much money you'll actually have left</li>
                     </ul>
                 </div>
                 <button class="primary" onclick="showPage('locationPage')">
@@ -42,8 +371,75 @@
             </div>
         </div>
 
-        <!-- Previous HTML for location, salary, and results pages remains the same -->
+        <div id="locationPage" class="page">
+            <div class="card">
+                <h2>Where Would You Like to Live?</h2>
+                <div class="explanation">
+                    <p>Select up to three cities to compare living costs and take-home pay.</p>
+                </div>
+                <div class="form-group">
+                    <label for="location1">Primary City:</label>
+                    <select id="location1" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="location2">Comparison City 1 (optional):</label>
+                    <select id="location2"></select>
+                </div>
+                <div class="form-group">
+                    <label for="location3">Comparison City 2 (optional):</label>
+                    <select id="location3"></select>
+                </div>
+                <div class="button-container">
+                    <button class="secondary" onclick="showPage('introPage')">
+                        <span class="material-symbols-rounded">arrow_back</span>
+                        Back
+                    </button>
+                    <button class="primary" onclick="showPage('salaryPage')">
+                        <span class="material-symbols-rounded">arrow_forward</span>
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
 
+        <div id="salaryPage" class="page">
+            <div class="card">
+                <h2>What's Your Salary?</h2>
+                <div class="explanation">
+                    <p>Enter your annual salary before taxes to calculate your take-home pay.</p>
+                </div>
+                <div class="form-group">
+                    <label for="salary">Annual Salary (USD):</label>
+                    <input type="text" id="salary" required placeholder="Example: 75,000">
+                </div>
+                <div class="button-container">
+                    <button class="secondary" onclick="showPage('locationPage')">
+                        <span class="material-symbols-rounded">arrow_back</span>
+                        Back
+                    </button>
+                    <button class="primary" onclick="calculateResults()">
+                        <span class="material-symbols-rounded">calculate</span>
+                        Calculate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsPage" class="page">
+            <div class="card">
+                <h2>Your Results</h2>
+                <div class="explanation">
+                    <p>Here's how your paycheck breaks down in each city.</p>
+                </div>
+                <div id="resultsContainer"></div>
+                <div class="button-container">
+                    <button class="primary" onclick="showPage('locationPage')">
+                        <span class="material-symbols-rounded">refresh</span>
+                        New Calculation
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -68,7 +464,8 @@
                 dining: 600,
                 entertainment: 350,
                 socialLife: 600,
-                stateTax: 0.0850
+
+stateTax: 0.0850
             },
             "Los Angeles, CA": {
                 rent: 2800,
@@ -227,6 +624,15 @@
             return ((salary - 1000000) * 0.37) + 296278;
         }
 
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
         function populateLocations() {
             const selects = [
                 document.getElementById('location1'),
@@ -306,15 +712,6 @@
 
             displayResults(results);
             showPage('resultsPage');
-        }
-
-        function formatMoney(amount) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(amount);
         }
 
         function displayResults(results) {
@@ -417,7 +814,7 @@
                             </tr>
                             <tr>
                                 <th colspan="2">Monthly Expenses</th>
-</tr>
+                            </tr>
                             <tr>
                                 <td>Rent:</td>
                                 <td>${formatMoney(result.monthlyCosts.rent)}</td>
