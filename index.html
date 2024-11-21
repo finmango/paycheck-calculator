@@ -443,175 +443,573 @@
     </div>
 
     <script>
-        const cityData = {
-            "New York City, NY": {
-                rent: 3500,
-                utilities: 150,
-                internet: 60,
-                groceries: 600,
-                transportation: 130,
-                dining: 500,
-                entertainment: 300,
-                socialLife: 500,
-                stateTax: 0.0685
-            },
-            "San Francisco, CA": {
-                rent: 3800,
-                utilities: 140,
-                internet: 70,
-                groceries: 650,
-                transportation: 120,
-                dining: 600,
-                entertainment: 350,
-                socialLife: 600,
+       const cityData = {
+    // A //
+    "Anchorage, AK": {
+        rent: 1400,
+        utilities: 160,
+        internet: 75,
+        groceries: 550,
+        transportation: 95,
+        dining: 400,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0
+    },
+    "Birmingham, AL": {
+        rent: 1200,
+        utilities: 150,
+        internet: 60,
+        groceries: 350,
+        transportation: 80,
+        dining: 300,
+        entertainment: 200,
+        socialLife: 300,
+        stateTax: 0.0500
+    },
+    "Little Rock, AR": {
+        rent: 1100,
+        utilities: 140,
+        internet: 60,
+        groceries: 350,
+        transportation: 75,
+        dining: 300,
+        entertainment: 200,
+        socialLife: 300,
+        stateTax: 0.0550
+    },
+    "Phoenix, AZ": {
+        rent: 1700,
+        utilities: 140,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0459
+    },
 
-stateTax: 0.0850
-            },
-            "Los Angeles, CA": {
-                rent: 2800,
-                utilities: 130,
-                internet: 65,
-                groceries: 550,
-                transportation: 110,
-                dining: 500,
-                entertainment: 300,
-                socialLife: 500,
-                stateTax: 0.0850
-            },
-            "Chicago, IL": {
-                rent: 2200,
-                utilities: 120,
-                internet: 55,
-                groceries: 450,
-                transportation: 100,
-                dining: 400,
-                entertainment: 250,
-                socialLife: 400,
-                stateTax: 0.0495
-            },
-            "Houston, TX": {
-                rent: 1600,
-                utilities: 130,
-                internet: 55,
-                groceries: 400,
-                transportation: 90,
-                dining: 350,
-                entertainment: 250,
-                socialLife: 350,
-                stateTax: 0
-            },
-            "Phoenix, AZ": {
-                rent: 1700,
-                utilities: 140,
-                internet: 60,
-                groceries: 400,
-                transportation: 85,
-                dining: 350,
-                entertainment: 250,
-                socialLife: 350,
-                stateTax: 0.0459
-            },
-            "Philadelphia, PA": {
-                rent: 1900,
-                utilities: 125,
-                internet: 60,
-                groceries: 450,
-                transportation: 95,
-                dining: 400,
-                entertainment: 250,
-                socialLife: 400,
-                stateTax: 0.0307
-            },
-            "San Antonio, TX": {
-                rent: 1400,
-                utilities: 125,
-                internet: 55,
-                groceries: 380,
-                transportation: 85,
-                dining: 300,
-                entertainment: 200,
-                socialLife: 300,
-                stateTax: 0
-            },
-            "San Diego, CA": {
-                rent: 2600,
-                utilities: 130,
-                internet: 65,
-                groceries: 500,
-                transportation: 100,
-                dining: 450,
-                entertainment: 300,
-                socialLife: 450,
-                stateTax: 0.0850
-            },
-            "Dallas, TX": {
-                rent: 1700,
-                utilities: 130,
-                internet: 55,
-                groceries: 400,
-                transportation: 90,
-                dining: 350,
-                entertainment: 250,
-                socialLife: 350,
-                stateTax: 0
-            },
-            "Austin, TX": {
-                rent: 1900,
-                utilities: 125,
-                internet: 55,
-                groceries: 420,
-                transportation: 85,
-                dining: 400,
-                entertainment: 300,
-                socialLife: 400,
-                stateTax: 0
-            },
-            "Seattle, WA": {
-                rent: 2400,
-                utilities: 130,
-                internet: 65,
-                groceries: 500,
-                transportation: 100,
-                dining: 450,
-                entertainment: 300,
-                socialLife: 450,
-                stateTax: 0
-            },
-            "Denver, CO": {
-                rent: 2000,
-                utilities: 120,
-                internet: 60,
-                groceries: 450,
-                transportation: 90,
-                dining: 400,
-                entertainment: 250,
-                socialLife: 400,
-                stateTax: 0.0455
-            },
-            "Boston, MA": {
-                rent: 3000,
-                utilities: 140,
-                internet: 65,
-                groceries: 550,
-                transportation: 110,
-                dining: 500,
-                entertainment: 300,
-                socialLife: 500,
-                stateTax: 0.0500
-            },
-            "Miami, FL": {
-                rent: 2500,
-                utilities: 130,
-                internet: 60,
-                groceries: 500,
-                transportation: 90,
-                dining: 450,
-                entertainment: 300,
-                socialLife: 450,
-                stateTax: 0
-            }
-        };
+    // B //
+    "Baltimore, MD": {
+        rent: 1800,
+        utilities: 140,
+        internet: 65,
+        groceries: 450,
+        transportation: 90,
+        dining: 400,
+        entertainment: 250,
+        socialLife: 400,
+        stateTax: 0.0575
+    },
+    "Boston, MA": {
+        rent: 3000,
+        utilities: 140,
+        internet: 65,
+        groceries: 550,
+        transportation: 110,
+        dining: 500,
+        entertainment: 300,
+        socialLife: 500,
+        stateTax: 0.0500
+    },
+    "Boise, ID": {
+        rent: 1500,
+        utilities: 130,
+        internet: 60,
+        groceries: 400,
+        transportation: 80,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0580
+    },
 
+    // C //
+    "Chicago, IL": {
+        rent: 2200,
+        utilities: 120,
+        internet: 55,
+        groceries: 450,
+        transportation: 100,
+        dining: 400,
+        entertainment: 250,
+        socialLife: 400,
+        stateTax: 0.0495
+    },
+    "Cleveland, OH": {
+        rent: 1300,
+        utilities: 130,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0399
+    },
+    "Charleston, SC": {
+        rent: 1700,
+        utilities: 140,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 400,
+        entertainment: 250,
+        socialLife: 400,
+        stateTax: 0.0700
+    },
+    "Charlotte, NC": {
+        rent: 1600,
+        utilities: 130,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0525
+    },
+    "Cheyenne, WY": {
+        rent: 1200,
+        utilities: 140,
+        internet: 65,
+        groceries: 375,
+        transportation: 80,
+        dining: 300,
+        entertainment: 200,
+        socialLife: 300,
+        stateTax: 0
+    },
+
+    // D //
+    "Denver, CO": {
+        rent: 2000,
+        utilities: 120,
+        internet: 60,
+        groceries: 450,
+        transportation: 90,
+        dining: 400,
+        entertainment: 250,
+        socialLife: 400,
+        stateTax: 0.0455
+    },
+    "Des Moines, IA": {
+        rent: 1200,
+        utilities: 130,
+        internet: 60,
+        groceries: 375,
+        transportation: 80,
+        dining: 300,
+        entertainment: 200,
+        socialLife: 300,
+        stateTax: 0.0600
+    },
+    "Detroit, MI": {
+        rent: 1300,
+        utilities: 140,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0425
+    },
+
+    // F //
+    "Fargo, ND": {
+        rent: 1100,
+        utilities: 140,
+        internet: 65,
+        groceries: 375,
+        transportation: 80,
+        dining: 300,
+        entertainment: 200,
+        socialLife: 300,
+        stateTax: 0.0290
+    },
+
+    // H //
+    "Houston, TX": {
+        rent: 1600,
+        utilities: 130,
+        internet: 55,
+        groceries: 400,
+        transportation: 90,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0
+    },
+    "Honolulu, HI": {
+        rent: 2500,
+        utilities: 170,
+        internet: 70,
+        groceries: 650,
+        transportation: 100,
+        dining: 500,
+        entertainment: 300,
+        socialLife: 450,
+        stateTax: 0.0825
+    },
+
+    // I //
+    "Indianapolis, IN": {
+        rent: 1300,
+        utilities: 130,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0323
+    },
+
+    // J //
+    "Jackson, MS": {
+        rent: 1100,
+        utilities: 140,
+        internet: 60,
+        groceries: 350,
+        transportation: 80,
+        dining: 300,
+        entertainment: 200,
+        socialLife: 300,
+        stateTax: 0.0500
+    },
+    "Jacksonville, FL": {
+        rent: 1500,
+        utilities: 140,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0
+    },
+
+    // K //
+    "Kansas City, MO": {
+        rent: 1300,
+        utilities: 130,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0540
+    },
+
+    // L //
+    "Las Vegas, NV": {
+        rent: 1500,
+        utilities: 150,
+        internet: 65,
+        groceries: 400,
+        transportation: 85,
+        dining: 400,
+        entertainment: 300,
+        socialLife: 400,
+        stateTax: 0
+    },
+    "Los Angeles, CA": {
+        rent: 2800,
+        utilities: 130,
+        internet: 65,
+        groceries: 550,
+        transportation: 110,
+        dining: 500,
+        entertainment: 300,
+        socialLife: 500,
+        stateTax: 0.0850
+    },
+    "Louisville, KY": {
+        rent: 1200,
+        utilities: 130,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0500
+    },
+
+    // M //
+    "Manchester, NH": {
+        rent: 1600,
+        utilities: 140,
+        internet: 65,
+        groceries: 425,
+        transportation: 90,
+        dining: 375,
+        entertainment: 250,
+        socialLife: 375,
+        stateTax: 0
+    },
+    "Memphis, TN": {
+        rent: 1200,
+        utilities: 140,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0
+    },
+    "Milwaukee, WI": {
+        rent: 1400,
+        utilities: 130,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0765
+    },
+    "Minneapolis, MN": {
+        rent: 1700,
+        utilities: 130,
+        internet: 60,
+        groceries: 425,
+        transportation: 90,
+        dining: 400,
+        entertainment: 275,
+        socialLife: 400,
+        stateTax: 0.0785
+    },
+
+    // N //
+    "Nashville, TN": {
+        rent: 1800,
+        utilities: 130,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 400,
+        entertainment: 275,
+        socialLife: 400,
+        stateTax: 0
+    },
+    "New Orleans, LA": {
+        rent: 1500,
+        utilities: 140,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 400,
+        entertainment: 300,
+        socialLife: 400,
+        stateTax: 0.0425
+    },
+    "New York City, NY": {
+        rent: 3500,
+        utilities: 150,
+        internet: 60,
+        groceries: 600,
+        transportation: 130,
+        dining: 500,
+        entertainment: 300,
+        socialLife: 500,
+        stateTax: 0.0685
+    },
+
+    // O //
+    "Oklahoma City, OK": {
+        rent: 1200,
+        utilities: 140,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0475
+    },
+    "Omaha, NE": {
+        rent: 1300,
+        utilities: 130,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0684
+    },
+
+    // P //
+    "Philadelphia, PA": {
+        rent: 1900,
+        utilities: 125,
+        internet: 60,
+        groceries: 450,
+        transportation: 95,
+        dining: 400,
+        entertainment: 250,
+        socialLife: 400,
+        stateTax: 0.0307
+    },
+    "Portland, ME": {
+        rent: 1800,
+        utilities: 140,
+        internet: 65,
+        groceries: 425,
+        transportation: 90,
+        dining: 400,
+        entertainment: 275,
+        socialLife: 400,
+        stateTax: 0.0715
+    },
+    "Portland, OR": {
+        rent: 2000,
+        utilities: 130,
+        internet: 65,
+        groceries: 450,
+        transportation: 100,
+        dining: 450,
+        entertainment: 300,
+        socialLife: 450,
+        stateTax: 0.0900
+    },
+    "Providence, RI": {
+        rent: 1700,
+        utilities: 140,
+        internet: 65,
+        groceries: 425,
+        transportation: 90,
+        dining: 400,
+        entertainment: 275,
+        socialLife: 400,
+        stateTax: 0.0599
+    },
+
+    // R //
+    "Raleigh, NC": {
+        rent: 1600,
+        utilities: 130,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 375,
+        entertainment: 250,
+        socialLife: 375,
+        stateTax: 0.0525
+    },
+
+    // S //
+    "Sacramento, CA": {
+        rent: 2000,
+        utilities: 140,
+        internet: 65,
+        groceries: 450,
+        transportation: 95,
+        dining: 400,
+        entertainment: 275,
+        socialLife: 400,
+        stateTax: 0.0850
+    },
+    "Salt Lake City, UT": {
+        rent: 1600,
+        utilities: 130,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 375,
+        entertainment: 250,
+        socialLife: 375,
+        stateTax: 0.0495
+    },
+    "San Francisco, CA": {
+        rent: 3800,
+        utilities: 140,
+        internet: 70,
+        groceries: 650,
+        transportation: 120,
+        dining: 600,
+        entertainment: 350,
+        socialLife: 600,
+        stateTax: 0.0850
+    },
+    "Seattle, WA": {
+        rent: 2400,
+        utilities: 130,
+        internet: 65,
+        groceries: 500,
+        transportation: 100,
+        dining: 450,
+        entertainment: 300,
+        socialLife: 450,
+        stateTax: 0
+    },
+    "Sioux Falls, SD": {
+        rent: 1200,
+        utilities: 130,
+        internet: 60,
+        groceries: 375,
+        transportation: 80,
+        dining: 300,
+        entertainment: 200,
+        socialLife: 300,
+        stateTax: 0
+    },
+
+    // T //
+    "Tucson, AZ": {
+        rent: 1400,
+        utilities: 140,
+        internet: 60,
+        groceries: 375,
+        transportation: 85,
+        dining: 350,
+        entertainment: 250,
+        socialLife: 350,
+        stateTax: 0.0459
+    },
+
+    // V //
+    "Virginia Beach, VA": {
+        rent: 1600,
+        utilities: 130,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 375,
+        entertainment: 250,
+        socialLife: 375,
+        stateTax: 0.0575
+    },
+
+    // W //
+    "Washington, DC": {
+        rent: 2800,
+        utilities: 140,
+        internet: 65,
+        groceries: 500,
+        transportation: 100,
+        dining: 500,
+        entertainment: 300,
+        socialLife: 500,
+        stateTax: 0.0875
+    },
+    "Wilmington, DE": {
+        rent: 1500,
+        utilities: 130,
+        internet: 60,
+        groceries: 400,
+        transportation: 85,
+        dining: 375,
+        entertainment: 250,
+        socialLife: 375,
+        stateTax: 0.0660
+    }
+};
         function calculateFederalTax(salary) {
             // 2024 tax brackets
             if (salary <= 11600) return 0;
